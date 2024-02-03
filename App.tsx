@@ -1,10 +1,12 @@
-import { Box, GluestackUIProvider } from "@gluestack-ui/themed";
 import { config } from "@gluestack-ui/config";
-import { StatusBar, Text } from "react-native";
+import { GluestackUIProvider } from "@gluestack-ui/themed";
+import { Text } from "react-native";
 import { useState } from "react";
 import Remote from "./src/pages/Remote";
 import Device from "./src/pages/Device";
 import Home from "./src/pages/Home";
+import MainLayout from "./src/layouts/MainLayout";
+import SetTabContext from "./src/Context/setTab";
 
 export type PageName = "remote" | "device" | "home";
 
@@ -33,10 +35,9 @@ export default function App() {
 	const currentPage = getCurrentPage(tab);
 	return (
 		<GluestackUIProvider config={config}>
-			<Box flex={1} mt={StatusBar.currentHeight}>
-        
-				{currentPage}
-			</Box>
+			<SetTabContext.Provider value={[tab, setTab]}>
+				<MainLayout>{currentPage}</MainLayout>
+			</SetTabContext.Provider>
 		</GluestackUIProvider>
 	);
 }
