@@ -1,30 +1,35 @@
 import { Box, Button, ButtonText, HStack, VStack } from "@gluestack-ui/themed";
-import React, { useContext } from "react";
+import { useNavigation } from "@react-navigation/native";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import React from "react";
 import AntIcon from "react-native-vector-icons/AntDesign";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import MaterialIcon from "react-native-vector-icons/MaterialIcons"
-import setTabContext from "../../Context/setTab";
+import MaterialIcon from "react-native-vector-icons/MaterialIcons";
+import { RootParamList } from "../../../App";
+
+type homeScreenProp = BottomTabNavigationProp<RootParamList>;
 
 const Navbar = () => {
-	const [current, setTab] = useContext(setTabContext);
+	const navigation = useNavigation<homeScreenProp>();
+	const currentIndex = navigation.getState().index || 0;
 	return (
 		<HStack
-			flex={1}
 			position="absolute"
 			bottom={0}
 			left={0}
 			right={0}
-			borderTopWidth={1}
+			borderTopWidth={2}
 			borderColor="$coolGray300"
+			bgColor="$white"
 			minHeight={40}
 		>
 			<TabButton
 				icon={<AntIcon name="home" size={18} />}
 				text="Home"
-				isActive={current == "home"}
+				isActive={currentIndex == 0}
 				pressColor="$coolGray300"
 				onPress={() => {
-					setTab("home");
+					navigation.navigate("Home");
 				}}
 			/>
 			<Box position="relative" top={-18}>
@@ -37,21 +42,21 @@ const Navbar = () => {
 						/>
 					}
 					text="Remote"
-					isActive={current == "remote"}
+					isActive={currentIndex == 1}
 					isPrimary
 					bgColor="$primary500"
 					onPress={() => {
-						setTab("remote");
+						navigation.navigate("Remote");
 					}}
 				/>
 			</Box>
 			<TabButton
 				icon={<MaterialCommunityIcon name="devices" size={18} />}
 				text="Device"
-				isActive={current == "device"}
+				isActive={currentIndex == 2}
 				pressColor="$coolGray300"
 				onPress={() => {
-					setTab("device");
+					navigation.navigate("Device");
 				}}
 			/>
 		</HStack>
