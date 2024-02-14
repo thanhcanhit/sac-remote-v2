@@ -13,7 +13,6 @@ import {
 } from "@gluestack-ui/themed";
 import React, { Dispatch, useContext } from "react";
 import { LangContext, MultilangContent } from "../../Context/lang";
-import MaterialICon from "react-native-vector-icons/MaterialIcons";
 
 type AutoSettingProps = {
 	name: MultilangContent;
@@ -74,40 +73,6 @@ const AutoSetting = ({
 				</VStack>
 				<Divider orientation="vertical" />
 				<HStack gap="$2">
-					{/* Turn off */}
-					<VStack alignItems="center">
-						<Button
-							size="sm"
-							action="primary"
-							rounded="$md"
-							$active-bgColor="$backgroundDark100"
-							variant="outline"
-							disabled={offValue === range.min}
-							onPress={() => {
-								increase(setOffValue);
-							}}
-						>
-							<ButtonIcon as={ChevronUpIcon} color="$primary500" />
-						</Button>
-						<Text bold>{offValue}</Text>
-						<Button
-							size="sm"
-							action="primary"
-							rounded="$md"
-							$active-bgColor="$backgroundDark100"
-							variant="outline"
-							disabled={offValue === range.max}
-							onPress={() => {
-								decrease(setOffValue);
-							}}
-						>
-							<ButtonIcon as={ChevronDownIcon} color="$primary500" />
-						</Button>
-						<Badge size="sm" mt="$1" variant="solid" action="error">
-							<BadgeText>{trans({ en: "Turn off", vi: "Tắt" })}</BadgeText>
-						</Badge>
-					</VStack>
-
 					{/* Turn On */}
 					<VStack alignItems="center">
 						<Button
@@ -139,6 +104,39 @@ const AutoSetting = ({
 						</Button>
 						<Badge size="sm" mt="$1" variant="solid" action="success">
 							<BadgeText>{trans({ en: "Turn on", vi: "Bật" })}</BadgeText>
+						</Badge>
+					</VStack>
+					{/* Turn off */}
+					<VStack alignItems="center">
+						<Button
+							size="sm"
+							action="primary"
+							rounded="$md"
+							$active-bgColor="$backgroundDark100"
+							variant="outline"
+							disabled={offValue === range.min}
+							onPress={() => {
+								increase(setOffValue);
+							}}
+						>
+							<ButtonIcon as={ChevronUpIcon} color="$primary500" />
+						</Button>
+						<Text bold>{offValue}</Text>
+						<Button
+							size="sm"
+							action="primary"
+							rounded="$md"
+							$active-bgColor="$backgroundDark100"
+							variant="outline"
+							disabled={offValue === range.max}
+							onPress={() => {
+								decrease(setOffValue);
+							}}
+						>
+							<ButtonIcon as={ChevronDownIcon} color="$primary500" />
+						</Button>
+						<Badge size="sm" mt="$1" variant="solid" action="error">
+							<BadgeText>{trans({ en: "Turn off", vi: "Tắt" })}</BadgeText>
 						</Badge>
 					</VStack>
 				</HStack>

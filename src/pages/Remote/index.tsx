@@ -1,11 +1,4 @@
 import {
-	Actionsheet,
-	ActionsheetBackdrop,
-	ActionsheetContent,
-	ActionsheetDragIndicator,
-	ActionsheetDragIndicatorWrapper,
-	ActionsheetItem,
-	ActionsheetItemText,
 	Alert,
 	AlertIcon,
 	AlertText,
@@ -15,13 +8,12 @@ import {
 	Button,
 	ButtonIcon,
 	ButtonText,
-	ChevronDownIcon,
-	ChevronUpIcon,
-	Divider,
+	CheckIcon,
+	CloseIcon,
 	HStack,
 	Heading,
+	Icon,
 	InfoIcon,
-	Pressable,
 	ScrollView,
 	Slider,
 	SliderFilledTrack,
@@ -35,15 +27,14 @@ import React, { useContext, useState } from "react";
 import { LangContext, MultilangContent } from "../../Context/lang";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import BatteryStatus from "../../components/BatteryStatus";
-import { LinearGradient } from "expo-linear-gradient";
 import HalfCirlceProgress from "../../components/HalfCircleProgress";
 import FanSwitch from "../../components/FanSwitch";
 import MaterialICon from "react-native-vector-icons/MaterialIcons";
 import AutoSetting from "./AutoSetting";
-import { Dimensions } from "react-native";
+import InfoButton from "./InfoButton";
 
 export type InfoName = "temperature" | "humidity" | "battery";
-type InfoData = {
+export type InfoData = {
 	id: InfoName;
 	label: MultilangContent;
 	icon: React.ReactElement;
@@ -79,8 +70,9 @@ const infoList: InfoData[] = [
 
 const Remote = () => {
 	const { trans } = useContext(LangContext);
-	const [showActionsheet, setShowActionsheet] = React.useState(false);
+	const [showActionsheet, setShowActionsheet] = useState(false);
 	const [currentView, setCurrentView] = useState<InfoName>("temperature");
+	const [showAutoSetting, setShowAutoSetting] = useState<boolean>(false);
 	const handleClose = () => setShowActionsheet(!showActionsheet);
 
 	const changeInfoView = (viewName: InfoName) => {
@@ -99,6 +91,44 @@ const Remote = () => {
 			}
 		/>
 	));
+
+	const AutoSettingBlock = (
+		<>
+			<AutoSetting
+				name={{
+					en: "Auto by thermal (℃)",
+					vi: "TĐ theo nhiệt độ (℃)",
+				}}
+				offValue={25}
+				onValue={20}
+				range={{ min: 10, max: 40 }}
+				setOffValue={() => {}}
+				setOnValue={() => {}}
+				color="red"
+				icon={<MaterialICon name="thermostat-auto" size={40} color={"red"} />}
+			/>
+
+			<AutoSetting
+				name={{
+					en: "Auto by humidity (%)",
+					vi: "TĐ theo độ ẩm (%)",
+				}}
+				offValue={25}
+				onValue={20}
+				range={{ min: 10, max: 40 }}
+				setOffValue={() => {}}
+				setOnValue={() => {}}
+				color="$primary400"
+				icon={
+					<MaterialCommunityIcon
+						name="water-percent"
+						size={40}
+						color="#1A91FF"
+					/>
+				}
+			/>
+		</>
+	);
 
 	return (
 		<Box flex={1}>
@@ -197,91 +227,64 @@ const Remote = () => {
 								</AlertText>
 							</Alert>
 						</HStack>
-
-						<AutoSetting
-							name={{
-								en: "Auto by thermal (℃)",
-								vi: "TĐ theo nhiệt độ (℃)",
-							}}
-							offValue={25}
-							onValue={20}
-							range={{ min: 10, max: 40 }}
-							setOffValue={() => {}}
-							setOnValue={() => {}}
-							color="red"
-							icon={
-								<MaterialICon name="thermostat-auto" size={40} color={"red"} />
-							}
-						/>
-
-						<AutoSetting
-							name={{
-								en: "Auto by humidity (%)",
-								vi: "TĐ theo độ ẩm (%)",
-							}}
-							offValue={25}
-							onValue={20}
-							range={{ min: 10, max: 40 }}
-							setOffValue={() => {}}
-							setOnValue={() => {}}
-							color="$primary400"
-							icon={
-								<MaterialCommunityIcon
-									name="water-percent"
-									size={40}
-									color="#1A91FF"
-								/>
-							}
-						/>
+						{showAutoSetting ? (
+							<HStack gap="$2">
+								<Button
+									action="secondary"
+									gap="$1"
+									onPress={() => {
+										setShowAutoSetting(false);
+									}}
+								>
+									<ButtonIcon>
+										<Icon as={CloseIcon} color="$white" />
+									</ButtonIcon>
+									<ButtonText>
+										{trans({
+											en: "Cancel",
+											vi: "Hủy bỏ",
+										})}
+									</ButtonText>
+								</Button>
+								<Button
+									flex={1}
+									gap="$1"
+									action="primary"
+									onPress={() => {
+										setShowAutoSetting(true);
+									}}
+								>
+									<ButtonIcon>
+										<Icon as={CheckIcon} color="$white" />
+									</ButtonIcon>
+									<ButtonText>
+										{trans({
+											en: "Save",
+											vi: "Lưu cài đặt",
+										})}
+									</ButtonText>
+								</Button>
+							</HStack>
+						) : (
+							<Button
+								action="primary"
+								onPress={() => {
+									setShowAutoSetting(true);
+								}}
+							>
+								<ButtonText>
+									{trans({
+										en: "Setting auto mode",
+										vi: "Cài đặt chế độ tự động",
+									})}
+								</ButtonText>
+							</Button>
+						)}
+						{showAutoSetting && AutoSettingBlock}
 					</Box>
 				</VStack>
 			</ScrollView>
 		</Box>
-	);
-};
-
-const InfoButton = ({
-	info,
-	isActive,
-	onPress,
-}: {
-	info: InfoData;
-	isActive?: boolean;
-	onPress?: VoidFunction;
-}) => {
-	const { trans } = useContext(LangContext);
-	return (
-		<LinearGradient
-			colors={["#4AA9FF", "#1A91FF"]}
-			start={[0, 0]}
-			end={[1, 1]}
-			style={{ borderRadius: 12 }}
-		>
-			<Pressable
-				flexDirection="column"
-				padding="$3"
-				py="$4"
-				width={100}
-				height={100}
-				rounded="$lg"
-				backgroundColor={isActive ? "$darkBlue500" : "transparent"}
-				justifyContent="space-between"
-				alignItems="flex-start"
-				borderWidth="$2"
-				borderColor="$primary200"
-				sx={{
-					":active": {
-						backgroundColor: "$primary200",
-						opacity: 0.6,
-					},
-				}}
-				disabled={isActive}
-				onPress={onPress}
-			>
-				<Box>{info.icon}</Box>
-				<ButtonText size="sm">{trans(info.label)}</ButtonText>
-			</Pressable>
-		</LinearGradient>
 	);
 };
 

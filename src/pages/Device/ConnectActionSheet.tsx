@@ -34,14 +34,6 @@ const ConnectActionSheet = ({
 				<ActionsheetDragIndicatorWrapper>
 					<ActionsheetDragIndicator />
 				</ActionsheetDragIndicatorWrapper>
-				<ActionsheetItem onPress={onAction1}>
-					<ActionsheetIcon>
-						<MaterialCommunityIcon name="information" size={15} color="gray" />
-					</ActionsheetIcon>
-					<ActionsheetItemText>
-						{trans({ en: "Device information", vi: "Thông tin thiết bị" })}
-					</ActionsheetItemText>
-				</ActionsheetItem>
 				<ActionsheetItem onPress={onSubmit}>
 					<ActionsheetIcon>
 						<MaterialCommunityIcon name="connection" size={15} color="gray" />
@@ -50,6 +42,15 @@ const ConnectActionSheet = ({
 						{trans({ en: "Connect", vi: "Kết nối" })}
 					</ActionsheetItemText>
 				</ActionsheetItem>
+				<ActionsheetItem onPress={onAction1}>
+					<ActionsheetIcon>
+						<MaterialCommunityIcon name="information" size={15} color="gray" />
+					</ActionsheetIcon>
+					<ActionsheetItemText>
+						{trans({ en: "Device information", vi: "Thông tin thiết bị" })}
+					</ActionsheetItemText>
+				</ActionsheetItem>
+
 				<ActionsheetItem onPress={onClose}>
 					<ActionsheetItemText>
 						{trans({ en: "Close", vi: "Đóng" })}

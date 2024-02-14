@@ -3,7 +3,6 @@ import {
 	HStack,
 	Heading,
 	ScrollView,
-	Text,
 	VStack,
 	Pressable,
 	View,
