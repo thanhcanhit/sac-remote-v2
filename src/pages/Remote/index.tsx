@@ -5,14 +5,8 @@ import {
 	Badge,
 	BadgeText,
 	Box,
-	Button,
-	ButtonIcon,
-	ButtonText,
-	CheckIcon,
-	CloseIcon,
 	HStack,
 	Heading,
-	Icon,
 	InfoIcon,
 	ScrollView,
 	Slider,
@@ -23,21 +17,22 @@ import {
 	Text,
 	VStack,
 } from "@gluestack-ui/themed";
-import React, { useContext, useState } from "react";
+import React, { Fragment, useContext, useMemo, useState } from "react";
 import { LangContext, MultilangContent } from "../../Context/lang";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import BatteryStatus from "../../components/BatteryStatus";
 import HalfCirlceProgress from "../../components/HalfCircleProgress";
 import FanSwitch from "../../components/FanSwitch";
-import MaterialICon from "react-native-vector-icons/MaterialIcons";
-import AutoSetting from "./AutoSetting";
 import InfoButton from "./InfoButton";
+import AutoSettingBlock from "./AutoSettingBlock";
 
 export type InfoName = "temperature" | "humidity" | "battery";
 export type InfoData = {
 	id: InfoName;
 	label: MultilangContent;
 	icon: React.ReactElement;
+	minValue: number;
+	maxValue: number;
 };
 
 const infoList: InfoData[] = [
@@ -51,6 +46,8 @@ const infoList: InfoData[] = [
 				color="white"
 			/>
 		),
+		minValue: 20,
+		maxValue: 40,
 	},
 	{
 		id: "humidity",
@@ -58,6 +55,8 @@ const infoList: InfoData[] = [
 		icon: (
 			<MaterialCommunityIcon name="water-outline" size={30} color="white" />
 		),
+		minValue: 0,
+		maxValue: 100,
 	},
 	{
 		id: "battery",
@@ -65,15 +64,14 @@ const infoList: InfoData[] = [
 		icon: (
 			<MaterialCommunityIcon name="battery-outline" size={30} color="white" />
 		),
+		minValue: 0,
+		maxValue: 100,
 	},
 ];
 
 const Remote = () => {
 	const { trans } = useContext(LangContext);
-	const [showActionsheet, setShowActionsheet] = useState(false);
 	const [currentView, setCurrentView] = useState<InfoName>("temperature");
-	const [showAutoSetting, setShowAutoSetting] = useState<boolean>(false);
-	const handleClose = () => setShowActionsheet(!showActionsheet);
 
 	const changeInfoView = (viewName: InfoName) => {
 		setCurrentView(viewName);
@@ -92,43 +90,14 @@ const Remote = () => {
 		/>
 	));
 
-	const AutoSettingBlock = (
-		<>
-			<AutoSetting
-				name={{
-					en: "Auto by thermal (℃)",
-					vi: "TĐ theo nhiệt độ (℃)",
-				}}
-				offValue={25}
-				onValue={20}
-				range={{ min: 10, max: 40 }}
-				setOffValue={() => {}}
-				setOnValue={() => {}}
-				color="red"
-				icon={<MaterialICon name="thermostat-auto" size={40} color={"red"} />}
-			/>
-
-			<AutoSetting
-				name={{
-					en: "Auto by humidity (%)",
-					vi: "TĐ theo độ ẩm (%)",
-				}}
-				offValue={25}
-				onValue={20}
-				range={{ min: 10, max: 40 }}
-				setOffValue={() => {}}
-				setOnValue={() => {}}
-				color="$primary400"
-				icon={
-					<MaterialCommunityIcon
-						name="water-percent"
-						size={40}
-						color="#1A91FF"
-					/>
-				}
-			/>
-		</>
+	const currentInfoItem: InfoData | undefined = useMemo(
+		() => infoList.find((item) => item.id === currentView),
+		[currentView]
 	);
+
+	const currentValue = 0;
+
+	if (!currentInfoItem) return <Fragment />;
 
 	return (
 		<Box flex={1}>
@@ -182,7 +151,11 @@ const Remote = () => {
 				<VStack mt="$2" px="$4" gap="$1">
 					<HStack gap="$2">{InfoListRendered}</HStack>
 					<Box my="$2">
-						<HalfCirlceProgress value={12} min={10} max={60} />
+						<HalfCirlceProgress
+							value={12}
+							min={currentInfoItem?.minValue}
+							max={currentInfoItem?.maxValue}
+						/>
 					</Box>
 				</VStack>
 
@@ -227,60 +200,7 @@ const Remote = () => {
 								</AlertText>
 							</Alert>
 						</HStack>
-						{showAutoSetting ? (
-							<HStack gap="$2">
-								<Button
-									action="secondary"
-									gap="$1"
-									onPress={() => {
-										setShowAutoSetting(false);
-									}}
-								>
-									<ButtonIcon>
-										<Icon as={CloseIcon} color="$white" />
-									</ButtonIcon>
-									<ButtonText>
-										{trans({
-											en: "Cancel",
-											vi: "Hủy bỏ",
-										})}
-									</ButtonText>
-								</Button>
-								<Button
-									flex={1}
-									gap="$1"
-									action="primary"
-									onPress={() => {
-										setShowAutoSetting(true);
-									}}
-								>
-									<ButtonIcon>
-										<Icon as={CheckIcon} color="$white" />
-									</ButtonIcon>
-									<ButtonText>
-										{trans({
-											en: "Save",
-											vi: "Lưu cài đặt",
-										})}
-									</ButtonText>
-								</Button>
-							</HStack>
-						) : (
-							<Button
-								action="primary"
-								onPress={() => {
-									setShowAutoSetting(true);
-								}}
-							>
-								<ButtonText>
-									{trans({
-										en: "Setting auto mode",
-										vi: "Cài đặt chế độ tự động",
-									})}
-								</ButtonText>
-							</Button>
-						)}
-						{showAutoSetting && AutoSettingBlock}
+						<AutoSettingBlock />
 					</Box>
 				</VStack>
 			</ScrollView>

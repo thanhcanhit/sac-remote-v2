@@ -1,5 +1,5 @@
 import { Box, Heading, View } from "@gluestack-ui/themed";
-import React, { useState, useCallback, useRef, useContext } from "react";
+import React, { useState, useCallback, useContext } from "react";
 import YoutubePlayer from "react-native-youtube-iframe";
 import { LangContext } from "../../Context/lang";
 const VideoPlayer = () => {

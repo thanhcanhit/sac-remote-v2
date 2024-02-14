@@ -2,23 +2,16 @@ import {
 	Avatar,
 	AvatarFallbackText,
 	Box,
-	Center,
-	Divider,
 	HStack,
 	Heading,
-	Link,
 	Pressable,
 	Text,
 	View,
 } from "@gluestack-ui/themed";
-import React, { useContext, useEffect, useRef, useState } from "react";
+import React, { useContext, useState } from "react";
 import { LangContext } from "../../Context/lang";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import SettingActionSheet from "./SettingActionSheet";
-import { LinearGradient } from "expo-linear-gradient";
-import Ionicon from "react-native-vector-icons/Ionicons";
-import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import { Animated, Easing } from "react-native";
 import HomeBanner from "./HomeBanner";
 import VideoPlayer from "./VideoPlayer";
 
@@ -57,7 +50,7 @@ const Home = () => {
 
 			<HomeBanner />
 
-				<VideoPlayer />
+			{/* <VideoPlayer /> */}
 			<SettingActionSheet
 				isOpen={showActionSheet}
 				onClose={() => setShowActionSheet(false)}

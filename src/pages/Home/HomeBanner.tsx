@@ -2,7 +2,6 @@ import {
 	Center,
 	HStack,
 	Heading,
-	VStack,
 	Box,
 	Text,
 	Link,
@@ -101,11 +100,7 @@ const HomeBanner = () => {
 							<Text color="$primary500" bold>
 								Website
 							</Text>
-							<MaterialCommunityIcon
-								name="shield-home"
-								color="#316FF6"
-								size={20}
-							/>
+							<Ionicon name="home" color="#316FF6" size={20} />
 						</HStack>
 					</Link>
 				</HStack>

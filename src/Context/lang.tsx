@@ -19,7 +19,7 @@ export const LangContext = createContext<{
 });
 
 const LanguageProvider = ({ children }: { children: React.ReactNode }) => {
-	const [lang, setLang] = useState<Language>("vi");
+	const [lang, setLang] = useState<Language>("en");
 
 	const getContentCurrentLanguage = (content: MultilangContent) => {
 		return content[lang];

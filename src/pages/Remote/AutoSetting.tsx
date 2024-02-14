@@ -13,6 +13,7 @@ import {
 } from "@gluestack-ui/themed";
 import React, { Dispatch, useContext } from "react";
 import { LangContext, MultilangContent } from "../../Context/lang";
+import ValueWithChangeButton from "./ValueWithChangeButton";
 
 type AutoSettingProps = {
 	name: MultilangContent;
@@ -57,88 +58,41 @@ const AutoSetting = ({
 
 	return (
 		<Box
-			mt="$1"
-			borderWidth={2}
+			mt="$2"
+			borderWidth={1}
 			p="$2"
 			rounded="$md"
 			$active-bgColor="$backgroundDark100"
-			borderColor="$coolGray200"
+			borderColor="$coolGray400"
 		>
 			<HStack gap="$2" justifyContent="space-around">
 				<VStack justifyContent="center" alignItems="center">
 					{icon}
-					<Text size="xs" bold color={color}>
+					<Text size="xs" bold color={color} opacity={0.6}>
 						{trans(name)}
 					</Text>
 				</VStack>
 				<Divider orientation="vertical" />
 				<HStack gap="$2">
 					{/* Turn On */}
-					<VStack alignItems="center">
-						<Button
-							size="sm"
-							action="primary"
-							rounded="$md"
-							$active-bgColor="$backgroundDark100"
-							variant="outline"
-							disabled={onValue === range.min}
-							onPress={() => {
-								increase(setOnValue);
-							}}
-						>
-							<ButtonIcon as={ChevronUpIcon} color="$primary500" />
-						</Button>
-						<Text bold>{onValue}</Text>
-						<Button
-							size="sm"
-							action="primary"
-							rounded="$md"
-							$active-bgColor="$backgroundDark100"
-							variant="outline"
-							disabled={onValue === range.max}
-							onPress={() => {
-								decrease(setOnValue);
-							}}
-						>
-							<ButtonIcon as={ChevronDownIcon} color="$primary500" />
-						</Button>
-						<Badge size="sm" mt="$1" variant="solid" action="success">
-							<BadgeText>{trans({ en: "Turn on", vi: "Bật" })}</BadgeText>
-						</Badge>
-					</VStack>
+					<ValueWithChangeButton
+						value={onValue}
+						badgeText={trans({ en: "turn on", vi: "Bật" })}
+						disableDecrease={onValue == range.min}
+						disableIncrease={onValue == range.max}
+						onDecrease={() => decrease(setOnValue)}
+						onIncrease={() => increase(setOnValue)}
+					/>
 					{/* Turn off */}
-					<VStack alignItems="center">
-						<Button
-							size="sm"
-							action="primary"
-							rounded="$md"
-							$active-bgColor="$backgroundDark100"
-							variant="outline"
-							disabled={offValue === range.min}
-							onPress={() => {
-								increase(setOffValue);
-							}}
-						>
-							<ButtonIcon as={ChevronUpIcon} color="$primary500" />
-						</Button>
-						<Text bold>{offValue}</Text>
-						<Button
-							size="sm"
-							action="primary"
-							rounded="$md"
-							$active-bgColor="$backgroundDark100"
-							variant="outline"
-							disabled={offValue === range.max}
-							onPress={() => {
-								decrease(setOffValue);
-							}}
-						>
-							<ButtonIcon as={ChevronDownIcon} color="$primary500" />
-						</Button>
-						<Badge size="sm" mt="$1" variant="solid" action="error">
-							<BadgeText>{trans({ en: "Turn off", vi: "Tắt" })}</BadgeText>
-						</Badge>
-					</VStack>
+					<ValueWithChangeButton
+						isNegative
+						value={offValue}
+						badgeText={trans({ en: "turn off", vi: "Tắt" })}
+						disableDecrease={offValue == range.min}
+						disableIncrease={offValue == range.max}
+						onDecrease={() => decrease(setOffValue)}
+						onIncrease={() => increase(setOffValue)}
+					/>
 				</HStack>
 			</HStack>
 		</Box>

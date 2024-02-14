@@ -50,18 +50,21 @@ export default function App() {
 							navigationKey="home"
 							name="Home"
 							component={HomePage}
+							options={{ freezeOnBlur: true }}
 						/>
 						<BottomTab.Screen
 							key="remote"
 							navigationKey="remote"
 							name="Remote"
 							component={RemotePage}
+							options={{ freezeOnBlur: true }}
 						/>
 						<BottomTab.Screen
 							key="device"
 							navigationKey="device"
 							name="Device"
 							component={DevicePage}
+							options={{ freezeOnBlur: true }}
 						/>
 					</BottomTab.Navigator>
 				</LanguageProvider>

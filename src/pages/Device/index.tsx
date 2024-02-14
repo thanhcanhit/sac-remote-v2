@@ -24,8 +24,8 @@ const Device = () => {
 			<Heading size="md" bold textAlign="center" color="$coolGray600">
 				{trans({ en: "Device", vi: "Thiết bị" })}
 			</Heading>
-			{/* Last device */}
 			<Box px="$4" mt="$2">
+				{/* Last device */}
 				<Box>
 					<HStack mb="$1">
 						<Badge size="sm">
