@@ -8,8 +8,9 @@ import Home from "./src/pages/Home";
 import MainLayout from "./src/layouts/MainLayout";
 import LanguageProvider from "./src/Context/lang";
 import { NavigationContainer } from "@react-navigation/native";
-import Navbar from "./src/components/Navbar";
-import { Fragment } from "react";
+import { Fragment, useEffect } from "react";
+import BluetoothStateManager from "react-native-bluetooth-state-manager";
+import useBLE from "./src/bluetooth/useBLE";
 
 const BottomTab = createBottomTabNavigator();
 
@@ -35,6 +36,25 @@ const HomePage = () => (
 );
 
 export default function App() {
+	const { requestPermissions } = useBLE();
+	useEffect(() => {
+		const requestTurnOnBluetooth = async () => {
+			if ((await BluetoothStateManager.getState()) !== "PoweredOn") {
+				await BluetoothStateManager.requestToEnable();
+			}
+		};
+
+		const getPermission = async () => {
+			const isGrandted: boolean = await requestPermissions();
+
+			if (isGrandted) {
+				requestTurnOnBluetooth();
+			}
+		};
+
+		getPermission();
+	}, []);
+
 	return (
 		<NavigationContainer>
 			<GluestackUIProvider config={config}>

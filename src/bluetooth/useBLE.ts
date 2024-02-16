@@ -9,7 +9,7 @@ import {
 } from "react-native-ble-plx";
 import * as ExpoDevice from "expo-device";
 import base64 from "react-native-base64";
-import localStorage, { LAST_ITEM_KEY } from "../storage/storage";
+import localStorage, { LAST_DEVICE_ID_KEY } from "../storage/storage";
 
 // UUID
 const SAC_BLE_UUID = {
@@ -175,7 +175,7 @@ function useBLE(): BluetoothLowEnergyApi {
 
 			// Save device to local storage
 			localStorage.save({
-				key: LAST_ITEM_KEY,
+				key: LAST_DEVICE_ID_KEY,
 				data: device,
 			});
 			return true;
@@ -487,7 +487,7 @@ function useBLE(): BluetoothLowEnergyApi {
 		// get last device in local storage
 		async function tryGetLastDevice() {
 			try {
-				const localData = await localStorage.load({ key: LAST_ITEM_KEY });
+				const localData = await localStorage.load({ key: LAST_DEVICE_ID_KEY });
 
 				if (localData) {
 					const savedDevice: Device = localData;
