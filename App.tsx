@@ -1,3 +1,4 @@
+import "react-native-reanimated";
 import "react-native-gesture-handler";
 import { config } from "@gluestack-ui/config";
 import { GluestackUIProvider } from "@gluestack-ui/themed";
@@ -8,9 +9,8 @@ import Home from "./src/pages/Home";
 import MainLayout from "./src/layouts/MainLayout";
 import LanguageProvider from "./src/Context/lang";
 import { NavigationContainer } from "@react-navigation/native";
-import { Fragment, useEffect } from "react";
-import BluetoothStateManager from "react-native-bluetooth-state-manager";
-import useBLE from "./src/bluetooth/useBLE";
+import { Fragment } from "react";
+import Welcome from "./src/pages/Welcome";
 
 const BottomTab = createBottomTabNavigator();
 
@@ -19,6 +19,7 @@ export type RootParamList = {
 	Home: undefined;
 	Device: undefined;
 };
+
 const RemotePage = () => (
 	<MainLayout>
 		<Remote />
@@ -36,52 +37,36 @@ const HomePage = () => (
 );
 
 export default function App() {
-	const { requestPermissions } = useBLE();
-	useEffect(() => {
-		const requestTurnOnBluetooth = async () => {
-			if ((await BluetoothStateManager.getState()) !== "PoweredOn") {
-				await BluetoothStateManager.requestToEnable();
-			}
-		};
-
-		const getPermission = async () => {
-			const isGrandted: boolean = await requestPermissions();
-
-			if (isGrandted) {
-				requestTurnOnBluetooth();
-			}
-		};
-
-		getPermission();
-	}, []);
-
 	return (
 		<NavigationContainer>
 			<GluestackUIProvider config={config}>
 				<LanguageProvider>
 					<BottomTab.Navigator
 						detachInactiveScreens={true}
-						initialRouteName="home"
+						initialRouteName="Welcome"
 						tabBar={() => <Fragment />}
 						screenOptions={{ header: () => <></>, freezeOnBlur: true }}
 					>
 						<BottomTab.Screen
-							key="home"
-							navigationKey="home"
+							navigationKey="Welcome"
+							name="Welcome"
+							component={Welcome}
+							options={{ freezeOnBlur: true }}
+						/>
+						<BottomTab.Screen
+							navigationKey="Home"
 							name="Home"
 							component={HomePage}
 							options={{ freezeOnBlur: true }}
 						/>
 						<BottomTab.Screen
-							key="remote"
-							navigationKey="remote"
+							navigationKey="Remote"
 							name="Remote"
 							component={RemotePage}
 							options={{ freezeOnBlur: true }}
 						/>
 						<BottomTab.Screen
-							key="device"
-							navigationKey="device"
+							navigationKey="Device"
 							name="Device"
 							component={DevicePage}
 							options={{ freezeOnBlur: true }}

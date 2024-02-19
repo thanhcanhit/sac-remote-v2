@@ -13,7 +13,6 @@ import { LangContext } from "../../Context/lang";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import SettingActionSheet from "./SettingActionSheet";
 import HomeBanner from "./HomeBanner";
-import VideoPlayer from "./VideoPlayer";
 
 const Home = () => {
 	const { trans } = useContext(LangContext);

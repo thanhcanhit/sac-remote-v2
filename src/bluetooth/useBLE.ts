@@ -474,11 +474,6 @@ function useBLE(): BluetoothLowEnergyApi {
 
 	// Initial
 	useEffect(() => {
-		const request = async () => {
-			await requestPermissions();
-		};
-		request();
-
 		// listen on disconnect and handle state change
 		bleManager.onDeviceDisconnected(connectedDevice?.id || "", () => {
 			setConnectedDevice(null);

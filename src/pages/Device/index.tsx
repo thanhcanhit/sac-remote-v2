@@ -19,6 +19,7 @@ const Device = () => {
 	const { trans } = useContext(LangContext);
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const [showActionSheet, setShowActionSheet] = useState<boolean>(false);
+	
 	return (
 		<View>
 			<Heading size="md" bold textAlign="center" color="$coolGray600">

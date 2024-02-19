@@ -12,6 +12,7 @@ type homeScreenProp = BottomTabNavigationProp<RootParamList>;
 const Navbar = () => {
 	const navigation = useNavigation<homeScreenProp>();
 	const currentIndex = navigation.getState().index || 0;
+	const startIndex = 1;
 	return (
 		<HStack
 			position="absolute"
@@ -26,7 +27,7 @@ const Navbar = () => {
 			<TabButton
 				icon={<AntIcon name="home" size={18} />}
 				text="Home"
-				isActive={currentIndex == 0}
+				isActive={currentIndex == startIndex + 0}
 				pressColor="$coolGray300"
 				onPress={() => {
 					navigation.navigate("Home");
@@ -42,7 +43,7 @@ const Navbar = () => {
 						/>
 					}
 					text="Remote"
-					isActive={currentIndex == 1}
+					isActive={currentIndex == startIndex + 1}
 					isPrimary
 					bgColor="$primary500"
 					onPress={() => {
@@ -53,7 +54,7 @@ const Navbar = () => {
 			<TabButton
 				icon={<MaterialCommunityIcon name="devices" size={18} />}
 				text="Device"
-				isActive={currentIndex == 2}
+				isActive={currentIndex == startIndex + 2}
 				pressColor="$coolGray300"
 				onPress={() => {
 					navigation.navigate("Device");
