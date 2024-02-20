@@ -1,7 +1,7 @@
-import { Box, Pressable } from "@gluestack-ui/themed";
+import { Pressable } from "@gluestack-ui/themed";
 import React, { useEffect, useRef } from "react";
 import { Animated, Easing } from "react-native";
-import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import FanSVG from "../../assets/svgs/fan.svg";
 
 type FanSwitchProps = {
 	state: boolean;
@@ -63,7 +63,12 @@ const FanSwitch = ({ state, onPress: onChange }: FanSwitchProps) => {
 					},
 				]}
 			>
-				<MaterialCommunityIcon name="fan" color="#1A91FF" size={40} />
+				<FanSVG
+					width={40}
+					height={40}
+					color="#1A91FF"
+					style={{ position: "relative", transform: [{ translateY: 1 }] }}
+				/>
 			</Animated.View>
 		</Pressable>
 	);

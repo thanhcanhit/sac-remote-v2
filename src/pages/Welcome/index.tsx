@@ -1,4 +1,10 @@
-import { Badge, BadgeText, SafeAreaView } from "@gluestack-ui/themed";
+import {
+	Badge,
+	BadgeText,
+	Center,
+	SafeAreaView,
+	Spinner,
+} from "@gluestack-ui/themed";
 import React, { useContext, useLayoutEffect, useMemo, useState } from "react";
 import { StatusBar } from "react-native";
 import useBLE from "../../bluetooth/useBLE";
@@ -17,6 +23,7 @@ import storage, { FIRST_TIME_LOGIN_KEY } from "../../storage/storage";
 
 const Welcome = () => {
 	const [index, setIndex] = useState<number>(0);
+	const [isLoading, setLoading] = useState<boolean>(true);
 	const navigate = useNavigation<BottomTabNavigationProp<RootParamList>>();
 	const { trans, setLang, lang } = useContext(LangContext);
 	const { requestPermissions } = useBLE();
@@ -150,6 +157,8 @@ const Welcome = () => {
 				}
 			} catch (err) {
 				return false;
+			} finally {
+				setLoading(false);
 			}
 		};
 
@@ -158,12 +167,20 @@ const Welcome = () => {
 
 	return (
 		<SafeAreaView flex={1} mt={StatusBar.currentHeight} bgColor="$white">
-			<Badge position="absolute" top="$2" right="$2">
-				<BadgeText bold>
-					{index + 1}/{pages.length}
-				</BadgeText>
-			</Badge>
-			{currentPage}
+			{isLoading ? (
+				<Center position="absolute" top={0} left={0} right={0} bottom={0}>
+					<Spinner size="large" />
+				</Center>
+			) : (
+				<>
+					<Badge position="absolute" top="$2" right="$2">
+						<BadgeText bold>
+							{index + 1}/{pages.length}
+						</BadgeText>
+					</Badge>
+					{currentPage}
+				</>
+			)}
 		</SafeAreaView>
 	);
 };
