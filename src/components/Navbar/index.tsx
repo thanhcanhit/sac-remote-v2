@@ -1,6 +1,6 @@
 import { Box, Button, ButtonText, HStack, VStack } from "@gluestack-ui/themed";
-import { useNavigation } from "@react-navigation/native";
 import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import AntIcon from "react-native-vector-icons/AntDesign";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";

@@ -1,18 +1,17 @@
 import {
+	Box,
 	Center,
+	Divider,
 	HStack,
 	Heading,
-	Box,
-	Text,
 	Link,
-	Divider,
-	VStack,
+	Text,
 } from "@gluestack-ui/themed";
 import { LinearGradient } from "expo-linear-gradient";
-import React from "react";
-import Ionicon from "react-native-vector-icons/Ionicons";
 import { motify } from "moti";
-import { MotiPressable, useMotiPressable } from "moti/interactions";
+import React from "react";
+import AntDesign from "react-native-vector-icons/AntDesign";
+import Ionicon from "react-native-vector-icons/Ionicons";
 
 const MotiBox = motify(Box)();
 
@@ -24,7 +23,7 @@ const HomeBanner = () => {
 				start={[0, 0]}
 				end={[1, 1]}
 			>
-				<Center width="$full" height={120}>
+				<Center width="$full" height={230}>
 					<HStack alignItems="center" gap="$2">
 						<Heading size="md" bold color="$white" textTransform="uppercase">
 							Smart Aircon Clothing
@@ -35,65 +34,40 @@ const HomeBanner = () => {
 					</Text>
 				</Center>
 			</LinearGradient>
-			<MotiBox
-				animate={{
-					transform: [
-						{
-							translateY: [2, -2],
-						},
-					],
-				}}
-				transition={{
-					delay: 0,
-					type: "timing",
-					duration: 2000,
-					loop: true,
-				}}
-				position="relative"
-				top={-24}
-				hardShadow="4"
-			>
-				<MotiPressable
-					animate={({ hovered, pressed }) => {
-						"worklet";
-
-						return {
-							scale: hovered || pressed ? 0.5 : 1,
-						};
-					}}
+			<MotiBox position="relative" top={-24} hardShadow="2">
+				<HStack
+					p="$3"
+					px="$4"
+					mx="$2"
+					minHeight={50}
+					alignItems="center"
+					bgColor="$white"
+					borderColor="$coolGray300"
+					justifyContent="space-between"
+					borderWidth={1}
+					rounded="$lg"
 				>
-					<HStack
-						p="$3"
-						px="$4"
-						mx="$4"
-						bgColor="$white"
-						borderColor="$coolGray300"
-						justifyContent="space-between"
-						borderWidth={2}
-						rounded="$lg"
+					<Link
+						w="50%"
+						href="fb://facewebmodal/f?href=https://www.facebook.com/sacvietnam21"
 					>
-						<Link
-							w="50%"
-							// href="fb://facewebmodal/f?href=https://www.facebook.com/sacvietnam21"
-						>
-							<VStack alignItems="center" gap="$1" justifyContent="center">
-								<Ionicon name="logo-facebook" color="#316FF6" size={20} />
-								<Text color="$primary500" size="sm">
-									Fanpage
-								</Text>
-							</VStack>
-						</Link>
-						<Divider orientation="vertical" />
-						<Link w="50%" href="https://sacvietnam.github.io/">
-							<VStack alignItems="center" gap="$1" justifyContent="center">
-								<Ionicon name="home" color="#316FF6" size={20} />
-								<Text color="$primary500" size="sm">
-									Website
-								</Text>
-							</VStack>
-						</Link>
-					</HStack>
-				</MotiPressable>
+						<HStack alignItems="center" gap="$2" justifyContent="center">
+							<Ionicon name="logo-facebook" color="#316FF6" size={20} />
+							<Text color="$primary500" size="sm">
+								Fanpage
+							</Text>
+						</HStack>
+					</Link>
+					<Divider orientation="vertical" />
+					<Link w="50%" href="https://sacvietnam.github.io/">
+						<HStack alignItems="center" gap="$2" justifyContent="center">
+							<AntDesign name="cloud" color="#316FF6" size={20} />
+							<Text color="$primary500" size="sm">
+								Website
+							</Text>
+						</HStack>
+					</Link>
+				</HStack>
 			</MotiBox>
 		</>
 	);

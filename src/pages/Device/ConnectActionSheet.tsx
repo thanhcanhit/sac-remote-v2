@@ -9,17 +9,19 @@ import {
 	ActionsheetItemText,
 } from "@gluestack-ui/themed";
 import React, { useContext } from "react";
-import { LangContext } from "../../Context/lang";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import { LangContext } from "../../Context/lang";
 
 type ConnectActionSheetProps = {
 	isOpen: boolean;
 	onAction1: VoidFunction;
 	onSubmit: VoidFunction;
 	onClose: VoidFunction;
+	name?: string;
 };
 
 const ConnectActionSheet = ({
+	name,
 	isOpen,
 	onAction1,
 	onClose,
@@ -34,6 +36,10 @@ const ConnectActionSheet = ({
 				<ActionsheetDragIndicatorWrapper>
 					<ActionsheetDragIndicator />
 				</ActionsheetDragIndicatorWrapper>
+
+				<ActionsheetItem justifyContent="center">
+					<ActionsheetItemText bold>{name}</ActionsheetItemText>
+				</ActionsheetItem>
 				<ActionsheetItem onPress={onSubmit}>
 					<ActionsheetIcon>
 						<MaterialCommunityIcon name="connection" size={15} color="gray" />

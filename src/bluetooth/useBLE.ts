@@ -10,6 +10,7 @@ import {
 import * as ExpoDevice from "expo-device";
 import base64 from "react-native-base64";
 import localStorage, { LAST_DEVICE_ID_KEY } from "../storage/storage";
+import { set } from "@gluestack-style/react";
 
 // UUID
 const SAC_BLE_UUID = {
@@ -28,12 +29,25 @@ const SAC_BLE_UUID = {
 			auto: "73134373-efbd-4770-b6b1-873cb6f00cf8",
 			settingTemperature: "780c3b1e-38a4-47a1-9c2b-9763aa7509c3",
 			settingHumidity: "ca4391b1-a5b1-4b6d-8dcd-055d078fd5fd",
-			control: "42b18506-e2d6-4630-b8b5-7f47ff213058",
+			control: "42b18506-e2d6-4630-b8b5-7f47ff213058", // Speed
 		},
 	},
 };
 
 export type fanSpeedValue = 150 | 200 | 250;
+
+const fanSpeedValueToLevel = (value: number) => {
+	let fanSpeedValue = 250;
+	if (value < 150) fanSpeedValue = 150;
+	else if (value < 250) fanSpeedValue = 200;
+	return (fanSpeedValue - 100) / 50;
+};
+
+const fanSpeedLevelToValue = (value: number) => {
+	if (value < 1) value = 1;
+	if (value > 3) value = 3;
+	return value * 50 + 100;
+};
 
 export type SettingState = {
 	turnOn: number;
@@ -43,6 +57,7 @@ export type SettingState = {
 export interface BluetoothLowEnergyApi {
 	allDevices: Device[];
 	requestPermissions(): Promise<boolean>;
+	isScanning: boolean;
 	scanForPeripherals(): void;
 	disconnectFromCurrentDevice: () => void;
 	connectToDevice: (deviceId: Device) => Promise<boolean>;
@@ -58,7 +73,7 @@ export interface BluetoothLowEnergyApi {
 	auto: boolean;
 	setNewSettingHumi: (value: SettingState) => void;
 	setNewSettingTemp: (value: SettingState) => void;
-	setNewControl: (newValue: fanSpeedValue) => void;
+	setNewControl: (newValue: number) => void;
 	setNewPower: (newValue: boolean) => void;
 	setNewAuto: (newValue: boolean) => void;
 }
@@ -70,6 +85,7 @@ function useBLE(): BluetoothLowEnergyApi {
 	const lastDevice = useRef<Device | null>(null);
 	const [allDevices, setAllDevices] = useState<Device[]>([]);
 	const [connectedDevice, setConnectedDevice] = useState<Device | null>(null);
+	const [isScanning, setIsScanning] = useState<boolean>(false);
 
 	// Characteristics
 	const [power, setPower] = useState<boolean>(false);
@@ -84,7 +100,7 @@ function useBLE(): BluetoothLowEnergyApi {
 		turnOn: 40,
 		turnOff: 80,
 	});
-	const [control, setControl] = useState<fanSpeedValue>(200);
+	const [control, setControl] = useState<number>(2);
 	const [auto, setAuto] = useState<boolean>(false);
 
 	const requestAndroid31Permissions = async () => {
@@ -124,30 +140,36 @@ function useBLE(): BluetoothLowEnergyApi {
 	};
 
 	const isDuplicateDevice = (devices: Device[], nextDevice: Device) =>
-		devices.findIndex((device) => nextDevice.id === device.id) > -1;
+		devices.findIndex((device) => nextDevice.id === device.id) < 0;
 
 	const scanForPeripherals = async () => {
+		setIsScanning(true);
 		setAllDevices([]);
-		bleManager.startDeviceScan(null, null, (error, device) => {
-			if (error) {
-				console.log(error);
-				bleManager.stopDeviceScan();
-			}
+		bleManager.startDeviceScan(
+			null,
+			{ allowDuplicates: false },
+			(error, device) => {
+				if (error) {
+					console.log(error);
+					bleManager.stopDeviceScan();
+				}
 
-			if (device) {
-				setAllDevices((prevState) => {
-					if (allDevices.length < 50 && !isDuplicateDevice(prevState, device)) {
-						return [...prevState, device];
-					}
+				if (device && device.name) {
+					setAllDevices((prevState) => {
+						if (isDuplicateDevice(prevState, device)) {
+							return [...prevState, device];
+						}
 
-					return prevState;
-				});
+						return prevState;
+					});
+				}
 			}
-		});
+		);
 
 		setTimeout(() => {
 			bleManager.stopDeviceScan();
-		}, 5000);
+			setIsScanning(false);
+		}, 8000);
 	};
 
 	const connectToDevice = async (device: Device): Promise<boolean> => {
@@ -194,6 +216,7 @@ function useBLE(): BluetoothLowEnergyApi {
 		return connectedDevice !== null;
 	};
 
+	// BLUETOOTH STATE UPDATE
 	const onTempUpdate = (
 		error: BleError | null,
 		characteristic: Characteristic | null
@@ -313,10 +336,7 @@ function useBLE(): BluetoothLowEnergyApi {
 		}
 
 		const rawData = Number(base64.decode(characteristic.value));
-		let fanSpeed: fanSpeedValue;
-		if (rawData < 150) fanSpeed = 150;
-		else if (rawData < 250) fanSpeed = 200;
-		else fanSpeed = 250;
+		let fanSpeed = fanSpeedValueToLevel(rawData);
 
 		setControl(fanSpeed);
 	};
@@ -366,12 +386,12 @@ function useBLE(): BluetoothLowEnergyApi {
 		return;
 	};
 
-	const setNewControl: (newValue: fanSpeedValue) => void = async (newValue) => {
+	const setNewControl: (fanLevel: number) => void = async (fanLevel) => {
 		if (isConnected()) {
 			await connectedDevice?.writeCharacteristicWithoutResponseForService(
 				SAC_BLE_UUID.settingService.uuid,
 				SAC_BLE_UUID.settingService.characteristics.control,
-				base64.encode(JSON.stringify(newValue))
+				base64.encode(JSON.stringify(fanSpeedLevelToValue(fanLevel)))
 			);
 		}
 		return;
@@ -498,6 +518,7 @@ function useBLE(): BluetoothLowEnergyApi {
 	return {
 		scanForPeripherals,
 		requestPermissions,
+		isScanning,
 		disconnectFromCurrentDevice,
 		allDevices,
 		connectToDevice,

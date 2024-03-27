@@ -2,22 +2,20 @@ import {
 	Button,
 	ButtonText,
 	CloseIcon,
+	Heading,
 	Icon,
 	Input,
 	InputField,
 	InputSlot,
-	ModalBody,
-	ModalFooter,
-	Text,
-	VStack,
-} from "@gluestack-ui/themed";
-import {
-	Heading,
 	Modal,
 	ModalBackdrop,
+	ModalBody,
 	ModalCloseButton,
 	ModalContent,
+	ModalFooter,
 	ModalHeader,
+	Text,
+	VStack,
 } from "@gluestack-ui/themed";
 import React, { useContext, useState } from "react";
 import { LangContext } from "../../Context/lang";

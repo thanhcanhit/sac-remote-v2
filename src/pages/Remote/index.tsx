@@ -18,13 +18,14 @@ import {
 	VStack,
 } from "@gluestack-ui/themed";
 import React, { Fragment, useContext, useMemo, useState } from "react";
-import { LangContext, MultilangContent } from "../../Context/lang";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
+import { BleContext } from "../../Context/ble";
+import { LangContext, MultilangContent } from "../../Context/lang";
 import BatteryStatus from "../../components/BatteryStatus";
-import HalfCirlceProgress from "../../components/HalfCircleProgress";
 import FanSwitch from "../../components/FanSwitch";
-import InfoButton from "./InfoButton";
+import HalfCirlceProgress from "../../components/HalfCircleProgress";
 import AutoSettingBlock from "./AutoSettingBlock";
+import InfoButton from "./InfoButton";
 
 export type InfoName = "temperature" | "humidity" | "battery";
 export type InfoData = {
@@ -72,6 +73,7 @@ const infoList: InfoData[] = [
 const Remote = () => {
 	const { trans } = useContext(LangContext);
 	const [currentView, setCurrentView] = useState<InfoName>("temperature");
+	const ble = useContext(BleContext);
 
 	const changeInfoView = (viewName: InfoName) => {
 		setCurrentView(viewName);
@@ -84,7 +86,7 @@ const Remote = () => {
 			onPress={() => changeInfoView(info.id)}
 			info={
 				info.id === "battery"
-					? { ...info, icon: <BatteryStatus value={100} /> }
+					? { ...info, icon: <BatteryStatus value={ble.battery} /> }
 					: info
 			}
 		/>
@@ -95,7 +97,18 @@ const Remote = () => {
 		[currentView]
 	);
 
-	const currentValue = 0;
+	const currentValue = useMemo(() => {
+		switch (currentInfoItem?.id) {
+			case "battery":
+				return ble.battery;
+			case "humidity":
+				return ble.humidity;
+			case "temperature":
+				return ble.temperature;
+			default:
+				return 15;
+		}
+	}, [currentInfoItem]);
 
 	if (!currentInfoItem) return <Fragment />;
 
@@ -111,7 +124,12 @@ const Remote = () => {
 						<Badge size="sm">
 							<BadgeText bold>{trans({ en: "Power", vi: "Nguồn" })}</BadgeText>
 						</Badge>
-						<FanSwitch state={true} onPress={() => {}} />
+						<FanSwitch
+							state={ble.power}
+							onPress={() => {
+								ble.setNewPower(!ble.power);
+							}}
+						/>
 					</VStack>
 					<VStack
 						p="$1"
@@ -127,6 +145,7 @@ const Remote = () => {
 						</Badge>
 						<Slider
 							mt="$1"
+							value={ble.control}
 							defaultValue={1}
 							step={1}
 							minValue={1}
@@ -136,6 +155,7 @@ const Remote = () => {
 							orientation="horizontal"
 							isDisabled={false}
 							isReversed={false}
+							onChange={(value) => ble.setNewControl(value)}
 						>
 							<SliderTrack>
 								<SliderFilledTrack />
@@ -143,7 +163,7 @@ const Remote = () => {
 							<SliderThumb />
 						</Slider>
 						<Text bold color="$primary500">
-							3
+							{ble.control}
 						</Text>
 					</VStack>
 				</HStack>
@@ -152,7 +172,7 @@ const Remote = () => {
 					<HStack gap="$2">{InfoListRendered}</HStack>
 					<Box my="$2">
 						<HalfCirlceProgress
-							value={12}
+							value={currentValue}
 							min={currentInfoItem?.minValue}
 							max={currentInfoItem?.maxValue}
 						/>
@@ -176,7 +196,10 @@ const Remote = () => {
 					<Box gap="$1">
 						<HStack justifyContent="space-between" mt="$2">
 							<VStack alignItems="flex-start">
-								<Switch value={false} />
+								<Switch
+									value={ble.auto}
+									onChange={() => ble.setNewAuto(!ble.auto)}
+								/>
 								<Badge size="sm">
 									<BadgeText bold>
 										{trans({ en: "Automatic mode", vi: "Chế độ tự động" })}

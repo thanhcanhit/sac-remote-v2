@@ -1,7 +1,7 @@
+import { Badge, BadgeText, Center, Text } from "@gluestack-ui/themed";
+import { LinearGradient } from "expo-linear-gradient";
 import React from "react";
 import { AnimatedCircularProgress } from "react-native-circular-progress";
-import { LinearGradient } from "expo-linear-gradient";
-import { Badge, BadgeText, Center, Text } from "@gluestack-ui/themed";
 
 type HalfCirlceProgressProps = {
 	value: number;

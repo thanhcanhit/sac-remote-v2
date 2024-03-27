@@ -5,21 +5,21 @@ import {
 	SafeAreaView,
 	Spinner,
 } from "@gluestack-ui/themed";
+import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
+import { useNavigation } from "@react-navigation/native";
 import React, { useContext, useLayoutEffect, useMemo, useState } from "react";
 import { StatusBar } from "react-native";
-import useBLE from "../../bluetooth/useBLE";
+import { RootParamList } from "../../../App";
 import { LangContext } from "../../Context/lang";
-import IntroPage, { IntroPageProps } from "./IntroPage";
-import LanguageSVG from "../../assets/svgs/language.svg";
-import WelcomeSVG from "../../assets/svgs/welcome.svg";
-import StatusSVG from "../../assets/svgs/stat.svg";
-import SettingSVG from "../../assets/svgs/setting.svg";
 import ConnectSVG from "../../assets/svgs/connect.svg";
 import DoneSVG from "../../assets/svgs/done.svg";
-import { useNavigation } from "@react-navigation/native";
-import { BottomTabNavigationProp } from "@react-navigation/bottom-tabs";
-import { RootParamList } from "../../../App";
+import LanguageSVG from "../../assets/svgs/language.svg";
+import SettingSVG from "../../assets/svgs/setting.svg";
+import StatusSVG from "../../assets/svgs/stat.svg";
+import WelcomeSVG from "../../assets/svgs/welcome.svg";
+import useBLE from "../../bluetooth/useBLE";
 import storage, { FIRST_TIME_LOGIN_KEY } from "../../storage/storage";
+import IntroPage, { IntroPageProps } from "./IntroPage";
 
 const Welcome = () => {
 	const [index, setIndex] = useState<number>(0);

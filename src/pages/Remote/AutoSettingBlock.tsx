@@ -7,12 +7,12 @@ import {
 	HStack,
 	Icon,
 } from "@gluestack-ui/themed";
+import { AnimatePresence, motify } from "moti";
 import React, { useContext, useState } from "react";
 import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
-import AutoSetting from "./AutoSetting";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { LangContext } from "../../Context/lang";
-import { AnimatePresence, motify } from "moti";
+import AutoSetting from "./AutoSetting";
 
 const MotiHStack = motify(HStack)();
 const MotiBox = motify(Box)();

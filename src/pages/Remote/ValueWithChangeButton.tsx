@@ -1,11 +1,12 @@
 import {
 	Badge,
 	BadgeText,
+	Button, ButtonIcon,
 	ChevronDownIcon,
 	ChevronUpIcon,
 	Text,
+	VStack,
 } from "@gluestack-ui/themed";
-import { Button, ButtonIcon, VStack } from "@gluestack-ui/themed";
 
 type ValueWithChangeButtonProps = {
 	value: number;

@@ -11,6 +11,7 @@ import LanguageProvider from "./src/Context/lang";
 import { NavigationContainer } from "@react-navigation/native";
 import { Fragment } from "react";
 import Welcome from "./src/pages/Welcome";
+import BleProvider from "./src/Context/ble";
 
 const BottomTab = createBottomTabNavigator();
 
@@ -41,37 +42,39 @@ export default function App() {
 		<NavigationContainer>
 			<GluestackUIProvider config={config}>
 				<LanguageProvider>
-					<BottomTab.Navigator
-						detachInactiveScreens={true}
-						initialRouteName="Welcome"
-						tabBar={() => <Fragment />}
-						screenOptions={{ header: () => <></>, freezeOnBlur: true }}
-					>
-						<BottomTab.Screen
-							navigationKey="Welcome"
-							name="Welcome"
-							component={Welcome}
-							options={{ freezeOnBlur: true }}
-						/>
-						<BottomTab.Screen
-							navigationKey="Home"
-							name="Home"
-							component={HomePage}
-							options={{ freezeOnBlur: true }}
-						/>
-						<BottomTab.Screen
-							navigationKey="Remote"
-							name="Remote"
-							component={RemotePage}
-							options={{ freezeOnBlur: true }}
-						/>
-						<BottomTab.Screen
-							navigationKey="Device"
-							name="Device"
-							component={DevicePage}
-							options={{ freezeOnBlur: true }}
-						/>
-					</BottomTab.Navigator>
+					<BleProvider>
+						<BottomTab.Navigator
+							detachInactiveScreens={true}
+							initialRouteName="Welcome"
+							tabBar={() => <Fragment />}
+							screenOptions={{ header: () => <></>, freezeOnBlur: true }}
+						>
+							<BottomTab.Screen
+								navigationKey="Welcome"
+								name="Welcome"
+								component={Welcome}
+								options={{ freezeOnBlur: true }}
+							/>
+							<BottomTab.Screen
+								navigationKey="Home"
+								name="Home"
+								component={HomePage}
+								options={{ freezeOnBlur: true }}
+							/>
+							<BottomTab.Screen
+								navigationKey="Remote"
+								name="Remote"
+								component={RemotePage}
+								options={{ freezeOnBlur: true }}
+							/>
+							<BottomTab.Screen
+								navigationKey="Device"
+								name="Device"
+								component={DevicePage}
+								options={{ freezeOnBlur: true }}
+							/>
+						</BottomTab.Navigator>
+					</BleProvider>
 				</LanguageProvider>
 			</GluestackUIProvider>
 		</NavigationContainer>

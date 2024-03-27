@@ -1,5 +1,5 @@
-import Storage from "react-native-storage";
 import AsyncStorage from "@react-native-async-storage/async-storage";
+import Storage from "react-native-storage";
 
 export const LAST_DEVICE_ID_KEY = "SACLASTDEVICE";
 export const USER_INFO_KEY = "SACUSERINFO";

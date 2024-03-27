@@ -1,8 +1,8 @@
+import { Box, ButtonText, Pressable } from "@gluestack-ui/themed";
+import { LinearGradient } from "expo-linear-gradient";
 import { useContext } from "react";
 import { InfoData } from ".";
 import { LangContext } from "../../Context/lang";
-import { LinearGradient } from "expo-linear-gradient";
-import { Box, ButtonText, Pressable } from "@gluestack-ui/themed";
 
 const InfoButton = ({
 	info,
