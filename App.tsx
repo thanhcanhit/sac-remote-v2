@@ -1,17 +1,17 @@
-import "react-native-reanimated";
 import "react-native-gesture-handler";
+import "react-native-reanimated";
 import { config } from "@gluestack-ui/config";
 import { GluestackUIProvider } from "@gluestack-ui/themed";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
-import Remote from "./src/pages/Remote";
-import Device from "./src/pages/Device";
-import Home from "./src/pages/Home";
-import MainLayout from "./src/layouts/MainLayout";
-import LanguageProvider from "./src/Context/lang";
 import { NavigationContainer } from "@react-navigation/native";
 import { Fragment } from "react";
-import Welcome from "./src/pages/Welcome";
 import BleProvider from "./src/Context/ble";
+import LanguageProvider from "./src/Context/lang";
+import MainLayout from "./src/layouts/MainLayout";
+import Device from "./src/pages/Device";
+import Home from "./src/pages/Home";
+import Remote from "./src/pages/Remote";
+import Welcome from "./src/pages/Welcome";
 
 const BottomTab = createBottomTabNavigator();
 

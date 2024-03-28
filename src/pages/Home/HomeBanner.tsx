@@ -4,6 +4,7 @@ import {
 	Divider,
 	HStack,
 	Heading,
+	Image,
 	Link,
 	Text,
 } from "@gluestack-ui/themed";
@@ -13,7 +14,7 @@ import React from "react";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import Ionicon from "react-native-vector-icons/Ionicons";
 
-const MotiBox = motify(Box)();
+const MotiCenter = motify(Center)();
 
 const HomeBanner = () => {
 	return (
@@ -32,9 +33,27 @@ const HomeBanner = () => {
 					<Text color="$white" italic size="sm">
 						Make you cool move
 					</Text>
+					<MotiCenter
+						from={{ translateY: 30 }}
+						animate={{ translateY: 0 }}
+						transition={{ type: 'spring', damping: 10, stiffness: 100 }}
+						position="absolute"
+						bottom={16}
+						bgColor="white"
+						px="$4"
+						mt="$2"
+						rounded="$xl"
+					>
+						<Image
+							resizeMode="contain"
+							height={50}
+							alt="sac"
+							source={require("../../assets/imgs/logo/saco.png")}
+						></Image>
+					</MotiCenter>
 				</Center>
 			</LinearGradient>
-			<MotiBox position="relative" top={-24} hardShadow="2">
+			<Box position="relative" top={-24} hardShadow="2">
 				<HStack
 					p="$3"
 					px="$4"
@@ -68,7 +87,7 @@ const HomeBanner = () => {
 						</HStack>
 					</Link>
 				</HStack>
-			</MotiBox>
+			</Box>
 		</>
 	);
 };

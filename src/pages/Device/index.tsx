@@ -186,9 +186,13 @@ const Device = () => {
 					</Badge>
 				</HStack>
 				<VStack mt="$2" gap="$1">
-					<Button onPress={ble.scanForPeripherals}>
-						<ButtonText>{trans({ en: "Refresh", vi: "Quét lại" })}</ButtonText>
-					</Button>
+					{!ble.isScanning && (
+						<Button onPress={ble.scanForPeripherals}>
+							<ButtonText>
+								{trans({ en: "Refresh", vi: "Quét lại" })}
+							</ButtonText>
+						</Button>
+					)}
 					{ble.isScanning && (
 						<HStack gap="$1" justifyContent="center">
 							<Spinner />

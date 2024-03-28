@@ -6,7 +6,6 @@ import {
 	Heading,
 	Image,
 	Text,
-	VStack,
 } from "@gluestack-ui/themed";
 import { AccordionContentText } from "@gluestack-ui/themed";
 import {
@@ -78,7 +77,7 @@ const AboutUs = () => {
 								return (
 									<>
 										<AccordionTitleText>
-											{trans({ en: "Who we are", vi: "Chúng tôi là ai" })}
+											{trans({ en: "Who we are?", vi: "Chúng tôi là ai?" })}
 										</AccordionTitleText>
 										{isExpanded ? (
 											<AccordionIcon as={ChevronUpIcon} ml="$3" />
@@ -91,7 +90,7 @@ const AboutUs = () => {
 						</AccordionTrigger>
 					</AccordionHeader>
 					<AccordionContent>
-						<HStack gap="$2" alignItems="center" justifyContent="space-between">
+						<HStack gap="$2" alignItems="center" justifyContent="space-around">
 							<Image
 								resizeMode="contain"
 								height={50}
@@ -102,14 +101,8 @@ const AboutUs = () => {
 							<Image
 								resizeMode="contain"
 								height={75}
-								alt="iuh"
+								alt="thesharks"
 								source={require("../../assets/imgs/logo/thesharks.png")}
-							></Image>
-							<Image
-								resizeMode="contain"
-								height={75}
-								alt="iuh"
-								source={require("../../assets/imgs/logo/saco.png")}
 							></Image>
 						</HStack>
 					</AccordionContent>
@@ -137,6 +130,14 @@ const AboutUs = () => {
 						</AccordionTrigger>
 					</AccordionHeader>
 					<AccordionContent>
+						<AccordionContentText color="$blueGray500" textAlign="center">
+							<Text size="xs" italic>
+								{trans({
+									en: "(Click to go to their Facebook page.)",
+									vi: "(Bấm để đến trang facebook của họ.)",
+								})}
+							</Text>
+						</AccordionContentText>
 						{informations.map((info, index) => (
 							<MemberItem key={index} {...info} />
 						))}
@@ -161,6 +162,7 @@ const informations: MemberInformation[] = [
 			en: "Want to challenge oneself with a major competition and contribute to creating valuable products for society.",
 			vi: "Muốn thử sức với một cuộc thi lớn và góp phần tạo ra sản phẩm giá trị cho xã hội.",
 		},
+		fb: "https://www.facebook.com/ttminhthuw.2406",
 	},
 	{
 		img: require("../../assets/imgs/team/thien.png"),
@@ -179,6 +181,7 @@ const informations: MemberInformation[] = [
 			en: "Want to build products for the community's benefit, creating value for society.",
 			vi: "Muốn xây dựng sản phẩm phục vụ lợi ích cộng đồng tạo ra giá trị cho xã hội.",
 		},
+		fb: "https://www.facebook.com/LCThien12",
 	},
 	{
 		img: require("../../assets/imgs/team/doan.png"),
@@ -193,6 +196,7 @@ const informations: MemberInformation[] = [
 			en: "Want to learn practical knowledge, research business fields to develop future enterprises.",
 			vi: "Muốn học hỏi những kiến thức thực tế, muốn nghiên cứu về lĩnh vực kinh doanh để phát triển doanh nghiệp trong tương lai.",
 		},
+		fb: "https://www.facebook.com/xuandoantran2109",
 	},
 	{
 		img: require("../../assets/imgs/team/canh.png"),
@@ -207,6 +211,7 @@ const informations: MemberInformation[] = [
 			en: "Help friends turn their ideas into products while learning and improving personal skills.",
 			vi: "Giúp biến ý tưởng của các bạn thành sản phẩm đồng thời nâng cao năng lực bản thân.",
 		},
+		fb: "https://www.facebook.com/thanhcanhit/",
 	},
 	{
 		img: require("../../assets/imgs/team/huyen.png"),
@@ -224,6 +229,7 @@ const informations: MemberInformation[] = [
 			en: "Want to learn and practice practical knowledge about product development in business, create products that protect people's health while working outdoors.",
 			vi: "Muốn học hỏi và rèn luyện kiến thức thực tế về phát triển sản phẩm trong kinh doanh, có sản phẩm giúp bảo vệ sức khỏe người dân trong khi làm việc dưới trời nắng.",
 		},
+		fb: "https://www.facebook.com/minhhuyen.nguyen.507464",
 	},
 	{
 		img: require("../../assets/imgs/team/nguyen.png"),
@@ -241,6 +247,7 @@ const informations: MemberInformation[] = [
 			en: "Want to learn research and innovation experience to create community-serving products, gain hands-on experience to accumulate personal knowledge and experience.",
 			vi: "muốn học hỏi kinh nghiệm nghiên cứu và sáng tạo sản phẩm phục vụ cộng đồng, được cọ sát bản thân với thực tế để tích lũy kinh nghiệm cho bản thân.",
 		},
+		fb: "https://www.facebook.com/profile.php?id=100047239297669",
 	},
 	{
 		img: require("../../assets/imgs/team/thao.png"),
@@ -258,6 +265,7 @@ const informations: MemberInformation[] = [
 			en: "Want to experience projects to closely engage with reality and accumulate more knowledge and experience for the future.",
 			vi: "Muốn trải nghiệm qua những dự án để được cọ sát với thực tế và tích lũy thêm nhiều kiến thức và kinh nghiệm cho bản thân sau này.",
 		},
+		fb: "https://www.facebook.com/profile.php?id=100089445186931",
 	},
 ];
 
