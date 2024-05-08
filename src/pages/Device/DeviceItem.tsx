@@ -6,10 +6,11 @@ import { motify } from "moti";
 type DeviceItemProps = {
 	device: Device;
 	onPress: VoidFunction;
+	isActive?: boolean;
 };
 
 const MotiPressalbe = motify(Pressable)();
-const DeviceItem = ({ device, onPress }: DeviceItemProps) => {
+const DeviceItem = ({ device, onPress, isActive }: DeviceItemProps) => {
 	return (
 		<MotiPressalbe
 			from={{ translateX: -100 }}
@@ -25,6 +26,7 @@ const DeviceItem = ({ device, onPress }: DeviceItemProps) => {
 				gap="$4"
 				borderWidth={1}
 				rounded="$md"
+				bgColor={isActive ? "$blue100" : "$white"}
 				borderColor="$coolGray300"
 			>
 				<MaterialIcon name="devices-other" size={30} color="gray" />

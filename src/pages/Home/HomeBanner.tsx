@@ -78,7 +78,7 @@ const HomeBanner = () => {
 						</HStack>
 					</Link>
 					<Divider orientation="vertical" />
-					<Link w="50%" href="https://sacvietnam.github.io/">
+					<Link w="50%" href="https://smartairconclothing.com/">
 						<HStack alignItems="center" gap="$2" justifyContent="center">
 							<AntDesign name="cloud" color="#316FF6" size={20} />
 							<Text color="$primary500" size="sm">

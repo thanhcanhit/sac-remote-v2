@@ -73,8 +73,15 @@ const Device = () => {
 	};
 
 	const handleDisconnect = () => {
-		ble.disconnectFromCurrentDevice();
-		showToast({ en: "Device disconnected", vi: "Đã ngắt kết nối" }, "general");
+		try {
+			ble.disconnectFromCurrentDevice();
+			showToast(
+				{ en: "Device disconnected", vi: "Đã ngắt kết nối" },
+				"general"
+			);
+		} catch (err) {
+			console.log("Error when disconnect", err);
+		}
 	};
 
 	const showToast = (message: MultilangContent, variant?: ToastVariant) => {
@@ -102,9 +109,13 @@ const Device = () => {
 	};
 
 	const handleSetSelectedDevice = (device: BleDevice) => {
-		if (device) {
-			setSelectedDevice(device);
-			setShowActionSheet(true);
+		try {
+			if (device) {
+				setSelectedDevice(device);
+				setShowActionSheet(true);
+			}
+		} catch (err) {
+			console.log("Select device err", err);
 		}
 	};
 
@@ -147,6 +158,7 @@ const Device = () => {
 							</Badge>
 						</HStack>
 						<DeviceItem
+							isActive={true}
 							device={ble.connectedDevice}
 							onPress={() => handleDisconnect()}
 						/>
@@ -167,9 +179,9 @@ const Device = () => {
 						</HStack>
 						<DeviceItem
 							device={ble.lastDevice}
-							onPress={() =>
-								ble.lastDevice && ble.connectToDevice(ble.lastDevice)
-							}
+							onPress={() => {
+								if (ble.lastDevice) ble.connectToDevice(ble.lastDevice);
+							}}
 						/>
 					</Box>
 				)}
@@ -211,7 +223,10 @@ const Device = () => {
 			<ConnectActionSheet
 				name={selectedDevice?.name || ""}
 				onClose={() => setShowActionSheet(false)}
-				onSubmit={async () => selectedDevice && handleConnect(selectedDevice)}
+				onSubmit={async () => {
+					selectedDevice && handleConnect(selectedDevice);
+					setShowActionSheet(false);
+				}}
 				onAction1={() => setShowModal(true)}
 				isOpen={showActionSheet}
 			/>

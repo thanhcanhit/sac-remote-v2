@@ -1,16 +1,4 @@
-import {
-	Badge,
-	BadgeText,
-	Box,
-	Button,
-	ButtonIcon,
-	ChevronDownIcon,
-	ChevronUpIcon,
-	Divider,
-	HStack,
-	Text,
-	VStack,
-} from "@gluestack-ui/themed";
+import { Box, Divider, HStack, Text, VStack } from "@gluestack-ui/themed";
 import React, { Dispatch, useContext } from "react";
 import { LangContext, MultilangContent } from "../../Context/lang";
 import ValueWithChangeButton from "./ValueWithChangeButton";
@@ -24,6 +12,7 @@ type AutoSettingProps = {
 	setOffValue: Dispatch<React.SetStateAction<number>>;
 	setOnValue: Dispatch<React.SetStateAction<number>>;
 	range: { min: number; max: number };
+	quantityChange?: number;
 };
 
 const AutoSetting = ({
@@ -35,25 +24,18 @@ const AutoSetting = ({
 	setOffValue,
 	setOnValue,
 	range,
+	quantityChange,
 }: AutoSettingProps) => {
 	const { trans } = useContext(LangContext);
 
-	const decrease = (setFunction: Dispatch<React.SetStateAction<number>>) => {
-		setFunction((prev) => {
-			const newState = prev - 1;
-			if (newState < range.min) return prev;
+	const amount = quantityChange ? quantityChange : 1;
 
-			return newState;
-		});
+	const decrease = (setFunction: Dispatch<React.SetStateAction<number>>) => {
+		setFunction((prev) => prev - amount);
 	};
 
 	const increase = (setFunction: Dispatch<React.SetStateAction<number>>) => {
-		setFunction((prev) => {
-			const newState = prev + 1;
-			if (newState > range.max) return prev;
-
-			return newState;
-		});
+		setFunction((prev) => prev + amount);
 	};
 
 	return (
@@ -99,4 +81,4 @@ const AutoSetting = ({
 	);
 };
 
-export default AutoSetting;
+export default React.memo(AutoSetting);

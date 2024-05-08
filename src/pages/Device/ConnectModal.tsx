@@ -69,12 +69,6 @@ const ConnectModal = ({
 							<Text bold>Connectable:</Text>
 							<Text>{device?.isConnectable}</Text>
 						</HStack>
-						<VStack gap="$1">
-							<Text bold>Raw Scan Record:</Text>
-							<ScrollView>
-								<Text>{device?.rawScanRecord}</Text>
-							</ScrollView>
-						</VStack>
 					</ScrollView>
 				</ModalBody>
 				<ModalFooter>

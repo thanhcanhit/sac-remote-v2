@@ -13,13 +13,33 @@ import FontAwesome6 from "react-native-vector-icons/FontAwesome6";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
 import { LangContext } from "../../Context/lang";
 import AutoSetting from "./AutoSetting";
+import { BleContext } from "../../Context/ble";
 
 const MotiHStack = motify(HStack)();
 const MotiBox = motify(Box)();
 
+const thermalRange = { min: 20, max: 40 };
+const humidityRange = { min: 0, max: 100 };
+
 const AutoSettingBlock = () => {
 	const [showAutoSetting, setShowAutoSetting] = useState<boolean>(false);
 	const { trans } = useContext(LangContext);
+	const ble = useContext(BleContext);
+
+	const [thermalOn, setThermalOn] = useState<number>(
+		ble.settingTemp.turnOn || 28
+	);
+	const [thermalOff, setThermalOff] = useState<number>(
+		ble.settingTemp.turnOff || 20
+	);
+	const [humiOn, setHumiOn] = useState<number>(ble.settingHumi.turnOn || 50);
+	const [humiOff, setHumiOff] = useState<number>(ble.settingHumi.turnOff || 20);
+
+	const handleSaveSetting = () => {
+		ble.setNewSettingTemp({ turnOn: thermalOn, turnOff: thermalOff });
+		ble.setNewSettingHumi({ turnOn: humiOn, turnOff: humiOff });
+	};
+
 	return (
 		<>
 			<AnimatePresence exitBeforeEnter>
@@ -48,7 +68,8 @@ const AutoSettingBlock = () => {
 							gap="$1"
 							action="primary"
 							onPress={() => {
-								setShowAutoSetting(true);
+								handleSaveSetting();
+								setShowAutoSetting(false);
 							}}
 						>
 							<ButtonIcon>
@@ -92,11 +113,11 @@ const AutoSettingBlock = () => {
 								en: "Auto by thermal (℃)",
 								vi: "TĐ theo nhiệt độ (℃)",
 							}}
-							offValue={25}
-							onValue={20}
-							range={{ min: 10, max: 40 }}
-							setOffValue={() => {}}
-							setOnValue={() => {}}
+							offValue={thermalOff}
+							onValue={thermalOn}
+							range={thermalRange}
+							setOffValue={setThermalOff}
+							setOnValue={setThermalOn}
 							color="red"
 							icon={
 								<FontAwesome6
@@ -111,11 +132,12 @@ const AutoSettingBlock = () => {
 								en: "Auto by humidity (%)",
 								vi: "TĐ theo độ ẩm (%)",
 							}}
-							offValue={25}
-							onValue={20}
-							range={{ min: 10, max: 40 }}
-							setOffValue={() => {}}
-							setOnValue={() => {}}
+							offValue={humiOff}
+							onValue={humiOn}
+							quantityChange={5}
+							range={humidityRange}
+							setOffValue={setHumiOff}
+							setOnValue={setHumiOn}
 							color="$primary400"
 							icon={
 								<MaterialCommunityIcon
@@ -132,4 +154,4 @@ const AutoSettingBlock = () => {
 	);
 };
 
-export default AutoSettingBlock;
+export default React.memo(AutoSettingBlock);

@@ -22,7 +22,6 @@ import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIc
 import { BleContext } from "../../Context/ble";
 import { LangContext, MultilangContent } from "../../Context/lang";
 import BatteryStatus from "../../components/BatteryStatus";
-import FanSwitch from "../../components/FanSwitch";
 import HalfCirlceProgress from "../../components/HalfCircleProgress";
 import AutoSettingBlock from "./AutoSettingBlock";
 import InfoButton from "./InfoButton";
@@ -120,13 +119,15 @@ const Remote = () => {
 
 			<ScrollView minHeight="$full">
 				<HStack p="$1" px="$4" justifyContent="space-between">
-					<VStack justifyContent="space-between" alignItems="center" gap="$1">
+					<VStack justifyContent="flex-start" alignItems="center" gap="$1">
 						<Badge size="sm">
 							<BadgeText bold>{trans({ en: "Power", vi: "Nguồn" })}</BadgeText>
 						</Badge>
-						<FanSwitch
-							state={ble.power}
-							onPress={() => {
+						<Switch
+							disabled={ble.auto}
+							size="md"
+							value={ble.power}
+							onToggle={() => {
 								ble.setNewPower(!ble.power);
 							}}
 						/>
@@ -153,8 +154,7 @@ const Remote = () => {
 							size="md"
 							minWidth={100}
 							orientation="horizontal"
-							isDisabled={false}
-							isReversed={false}
+							isDisabled={ble.auto}
 							onChange={(value) => ble.setNewControl(value)}
 						>
 							<SliderTrack>

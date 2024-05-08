@@ -17,16 +17,16 @@ import LanguageSVG from "../../assets/svgs/language.svg";
 import SettingSVG from "../../assets/svgs/setting.svg";
 import StatusSVG from "../../assets/svgs/stat.svg";
 import WelcomeSVG from "../../assets/svgs/welcome.svg";
-import useBLE from "../../bluetooth/useBLE";
 import storage, { FIRST_TIME_LOGIN_KEY } from "../../storage/storage";
 import IntroPage, { IntroPageProps } from "./IntroPage";
+import { BleContext } from "../../Context/ble";
 
 const Welcome = () => {
 	const [index, setIndex] = useState<number>(0);
 	const [isLoading, setLoading] = useState<boolean>(true);
 	const navigate = useNavigation<BottomTabNavigationProp<RootParamList>>();
 	const { trans, setLang, lang } = useContext(LangContext);
-	const { requestPermissions } = useBLE();
+	const { requestPermissions } = useContext(BleContext);
 
 	const nextPage = () => setIndex((prev) => prev + 1);
 	const requestBluetooth = () => {

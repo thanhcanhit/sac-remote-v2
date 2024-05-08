@@ -10,7 +10,7 @@ import {
 import * as ExpoDevice from "expo-device";
 import base64 from "react-native-base64";
 import localStorage, { LAST_DEVICE_ID_KEY } from "../storage/storage";
-import { set } from "@gluestack-style/react";
+import { P } from "@expo/html-elements";
 
 // UUID
 const SAC_BLE_UUID = {
@@ -34,11 +34,11 @@ const SAC_BLE_UUID = {
 	},
 };
 
-export type fanSpeedValue = 150 | 200 | 250;
+export type fanSpeedValue = 100 | 200 | 250;
 
 const fanSpeedValueToLevel = (value: number) => {
 	let fanSpeedValue = 250;
-	if (value < 150) fanSpeedValue = 150;
+	if (value < 100) fanSpeedValue = 100;
 	else if (value < 250) fanSpeedValue = 200;
 	return (fanSpeedValue - 100) / 50;
 };
@@ -100,7 +100,7 @@ function useBLE(): BluetoothLowEnergyApi {
 		turnOn: 40,
 		turnOff: 80,
 	});
-	const [control, setControl] = useState<number>(2);
+	const [control, setControl] = useState<number>(1);
 	const [auto, setAuto] = useState<boolean>(false);
 
 	const requestAndroid31Permissions = async () => {
@@ -173,42 +173,50 @@ function useBLE(): BluetoothLowEnergyApi {
 	};
 
 	const connectToDevice = async (device: Device): Promise<boolean> => {
-		const deviceConnection = await bleManager.connectToDevice(device.id);
-		if (deviceConnection) {
-			// Check is sac device
-			const hasInfoService =
-				await deviceConnection.discoverAllServicesAndCharacteristics();
+		try {
+			const deviceConnection = await bleManager.connectToDevice(device.id);
+			if (deviceConnection) {
+				// Check is sac device
+				const hasInfoService =
+					await deviceConnection.discoverAllServicesAndCharacteristics();
 
-			const deviceServices = await deviceConnection.services();
-			deviceServices.findIndex(
-				(service) => service.uuid == SAC_BLE_UUID.infoService.uuid
-			) != -1;
-			const hasSettingService =
+				const deviceServices = await deviceConnection.services();
 				deviceServices.findIndex(
-					(service) => service.uuid == SAC_BLE_UUID.settingService.uuid
+					(service) => service.uuid == SAC_BLE_UUID.infoService.uuid
 				) != -1;
-			if (!hasInfoService || !hasSettingService) return false;
+				const hasSettingService =
+					deviceServices.findIndex(
+						(service) => service.uuid == SAC_BLE_UUID.settingService.uuid
+					) != -1;
+				if (!hasInfoService || !hasSettingService) return false;
 
-			console.log("SERVICES" + deviceServices.map((item) => item.uuid + "\n"));
-			setConnectedDevice(deviceConnection);
-			lastDevice.current = deviceConnection;
+				setConnectedDevice(deviceConnection);
+				lastDevice.current = deviceConnection;
 
-			bleManager.stopDeviceScan();
+				bleManager.stopDeviceScan();
 
-			// Save device to local storage
-			localStorage.save({
-				key: LAST_DEVICE_ID_KEY,
-				data: device,
-			});
-			return true;
+				// Save device to local storage
+				localStorage.save({
+					key: LAST_DEVICE_ID_KEY,
+					data: device,
+				});
+				return true;
+			}
+			return false;
+		} catch (err) {
+			console.log("Error when connect device", err);
+			return false;
 		}
-		return false;
 	};
 
 	const disconnectFromCurrentDevice = async () => {
-		if (connectedDevice) {
-			await connectedDevice.cancelConnection();
-			setConnectedDevice(null);
+		try {
+			if (connectedDevice) {
+				await connectedDevice.cancelConnection();
+				setConnectedDevice(null);
+			}
+		} catch (err) {
+			console.log("Error when disconnect", err);
 		}
 	};
 
@@ -473,23 +481,15 @@ function useBLE(): BluetoothLowEnergyApi {
 
 	// Listen notify
 	useEffect(() => {
-		const readPowerState = async () => {
-			const characteristic =
-				await connectedDevice?.readCharacteristicForService(
-					SAC_BLE_UUID.infoService.uuid,
-					SAC_BLE_UUID.infoService.characteristics.power
-				);
-			if (characteristic?.value) {
-				const value = Boolean(Number(base64.decode(characteristic.value)));
-
-				setPower(value);
-			}
-		};
-
 		if (connectedDevice) {
-			readPowerState();
 			startStreamingData(connectedDevice);
 		}
+
+		return () => {
+			if (connectedDevice) {
+				connectedDevice.cancelConnection();
+			}
+		};
 	}, [connectedDevice]);
 
 	// Initial
