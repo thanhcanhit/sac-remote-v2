@@ -26,15 +26,18 @@ const DeviceItem = ({ device, onPress, isActive }: DeviceItemProps) => {
 				gap="$4"
 				borderWidth={1}
 				rounded="$md"
-				bgColor={isActive ? "$blue100" : "$white"}
+				bgColor={isActive ? "$blue50" : "$white"}
 				borderColor="$coolGray300"
 			>
-				<MaterialIcon name="devices-other" size={30} color="gray" />
+				<MaterialIcon
+					name={isActive ? "bluetooth-connected" : "devices-other"}
+					size={25}
+					color={isActive ? "#0670d4" : "gray"}
+				/>
 				<VStack>
-					<Heading size="sm" color="$coolGray500">
-						{device?.name || "Unknown Device"}
+					<Heading size="sm" color={isActive ? "$primary500" : "$coolGray500"}>
+						{device?.name || "Unknown Device"} {isActive ? "(Connected)" : ""}
 					</Heading>
-					<Text>{device?.id || "Unknown ID"}</Text>
 				</VStack>
 			</HStack>
 		</MotiPressalbe>

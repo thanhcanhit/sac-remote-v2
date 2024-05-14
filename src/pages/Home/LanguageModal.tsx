@@ -3,11 +3,14 @@ import {
 	ButtonText,
 	CloseIcon,
 	Heading,
-	Icon, Modal,
+	Icon,
+	Modal,
 	ModalBackdrop,
 	ModalBody,
 	ModalCloseButton,
-	ModalContent, ModalHeader, VStack
+	ModalContent,
+	ModalHeader,
+	VStack,
 } from "@gluestack-ui/themed";
 import React, { useContext } from "react";
 import { LangContext } from "../../Context/lang";
@@ -23,7 +26,7 @@ const LanguageModal = ({ show, onClose }: LanguageModalProps) => {
 	return (
 		<Modal isOpen={show} onClose={onClose}>
 			<ModalBackdrop />
-			<ModalContent>
+			<ModalContent p={8}>
 				<ModalHeader>
 					<Heading size="md">
 						{trans({ en: "Select your language", vi: "Chọn ngôn ngữ của bạn" })}
@@ -32,10 +35,11 @@ const LanguageModal = ({ show, onClose }: LanguageModalProps) => {
 						<Icon as={CloseIcon} />
 					</ModalCloseButton>
 				</ModalHeader>
-				<ModalBody>
+				<ModalBody pb={40} mt={24}>
 					<VStack mt="$2" gap="$2">
 						<Button
-							variant="outline"
+							variant="solid"
+							rounded="$full"
 							onPress={() => {
 								setLang("en");
 								onClose();
@@ -44,7 +48,8 @@ const LanguageModal = ({ show, onClose }: LanguageModalProps) => {
 							<ButtonText>English</ButtonText>
 						</Button>
 						<Button
-							variant="outline"
+							variant="solid"
+							rounded="$full"
 							onPress={() => {
 								setLang("vi");
 								onClose();

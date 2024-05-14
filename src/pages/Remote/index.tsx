@@ -112,9 +112,9 @@ const Remote = () => {
 	if (!currentInfoItem) return <Fragment />;
 
 	return (
-		<Box flex={1}>
-			<Heading size="md" bold textAlign="center" color="$coolGray600">
-				{trans({ en: "Remote", vi: "Điều khiển" })}
+		<Box flex={1} >
+			<Heading size="md" bold textAlign="center" my={4} color="$coolGray600">
+				{trans({ en: "Remote Panel", vi: "Bảng điều khiển" })}
 			</Heading>
 
 			<ScrollView minHeight="$full">
@@ -152,9 +152,10 @@ const Remote = () => {
 							minValue={1}
 							maxValue={3}
 							size="md"
-							minWidth={100}
+							minWidth={120}
 							orientation="horizontal"
 							isDisabled={ble.auto}
+							$disabled-bg="coolGray200"
 							onChange={(value) => ble.setNewControl(value)}
 						>
 							<SliderTrack>

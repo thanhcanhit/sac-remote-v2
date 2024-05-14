@@ -1,11 +1,12 @@
 import {
 	AccordionContent,
 	Box,
-	Center,
-	HStack,
+	Center, VStack,
 	Heading,
 	Image,
 	Text,
+	Link,
+	LinkText
 } from "@gluestack-ui/themed";
 import { AccordionContentText } from "@gluestack-ui/themed";
 import {
@@ -90,21 +91,34 @@ const AboutUs = () => {
 						</AccordionTrigger>
 					</AccordionHeader>
 					<AccordionContent>
-						<HStack gap="$2" alignItems="center" justifyContent="space-around">
-							<Image
-								resizeMode="contain"
-								height={50}
-								alt="iuh"
-								source={require("../../assets/imgs/logo/iuh.png")}
-							></Image>
+						<VStack gap="$2" alignItems="center" justifyContent="space-around">
+							<VStack alignItems="center">
+								<Image
+									resizeMode="contain"
+									height={50}
+									alt="iuh"
+									source={require("../../assets/imgs/logo/iuh.png")}
+								></Image>
+								<Text size="sm" bold textAlign="center">
+									{trans({
+										en: "Industrial University of Ho Chi Minh City",
+										vi: "Trường Đại học Công nghiệp Thành phố Hồ Chí Minh",
+									})}
+								</Text>
+							</VStack>
 
-							<Image
-								resizeMode="contain"
-								height={75}
-								alt="thesharks"
-								source={require("../../assets/imgs/logo/thesharks.png")}
-							></Image>
-						</HStack>
+							<VStack alignItems="center">
+								<Image
+									resizeMode="contain"
+									height={75}
+									alt="thesharks"
+									source={require("../../assets/imgs/logo/thesharks.png")}
+								></Image>
+								<Text bold size="sm" textAlign="center">
+									The Sharks Team
+								</Text>
+							</VStack>
+						</VStack>
 					</AccordionContent>
 				</AccordionItem>
 				<AccordionItem value="b">
@@ -144,6 +158,21 @@ const AboutUs = () => {
 					</AccordionContent>
 				</AccordionItem>
 			</Accordion>
+
+			<Box>
+				<Text size="sm" textAlign="center" mt={4} color="$coolGray600">
+					{trans({
+						en: "For more information, please visit our website",
+						vi: "Để biết thêm thông tin, vui lòng truy cập trang web của chúng tôi",
+					})}
+				</Text>
+
+				<Link href="https://smartairconclothing.com">
+					<LinkText textAlign="center">
+						https://smartairconclothing.com
+					</LinkText>
+				</Link>
+			</Box>
 		</Box>
 	);
 };

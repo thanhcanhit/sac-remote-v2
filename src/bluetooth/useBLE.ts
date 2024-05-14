@@ -10,7 +10,6 @@ import {
 import * as ExpoDevice from "expo-device";
 import base64 from "react-native-base64";
 import localStorage, { LAST_DEVICE_ID_KEY } from "../storage/storage";
-import { P } from "@expo/html-elements";
 
 // UUID
 const SAC_BLE_UUID = {
@@ -34,13 +33,12 @@ const SAC_BLE_UUID = {
 	},
 };
 
-export type fanSpeedValue = 100 | 200 | 250;
+export type fanSpeedValue = 150 | 200 | 250;
 
 const fanSpeedValueToLevel = (value: number) => {
-	let fanSpeedValue = 250;
-	if (value < 100) fanSpeedValue = 100;
-	else if (value < 250) fanSpeedValue = 200;
-	return (fanSpeedValue - 100) / 50;
+	if (value <= 150) return 1;
+	if (value <= 200) return 2;
+	else return 3;
 };
 
 const fanSpeedLevelToValue = (value: number) => {
@@ -78,6 +76,16 @@ export interface BluetoothLowEnergyApi {
 	setNewAuto: (newValue: boolean) => void;
 }
 
+const DEFAULT_SETTING_TEMP = {
+	turnOn: 26,
+	turnOff: 20,
+};
+
+const DEFAULT_SETTING_HUMI = {
+	turnOn: 60,
+	turnOff: 20,
+};
+
 function useBLE(): BluetoothLowEnergyApi {
 	const bleManager = useMemo(() => new BleManager(), []);
 
@@ -92,14 +100,10 @@ function useBLE(): BluetoothLowEnergyApi {
 	const [temperature, setTemperature] = useState<number>(20);
 	const [humidity, setHumidity] = useState<number>(50);
 	const [battery, setBattery] = useState<number>(100);
-	const [settingTemp, setSettingTemp] = useState<SettingState>({
-		turnOn: 25,
-		turnOff: 40,
-	});
-	const [settingHumi, setSettingHumi] = useState<SettingState>({
-		turnOn: 40,
-		turnOff: 80,
-	});
+	const [settingTemp, setSettingTemp] =
+		useState<SettingState>(DEFAULT_SETTING_TEMP);
+	const [settingHumi, setSettingHumi] =
+		useState<SettingState>(DEFAULT_SETTING_HUMI);
 	const [control, setControl] = useState<number>(1);
 	const [auto, setAuto] = useState<boolean>(false);
 
@@ -309,7 +313,11 @@ function useBLE(): BluetoothLowEnergyApi {
 			.split(" ")
 			.map((str_value: string) => Number(str_value));
 
-		setSettingTemp({ turnOn: value[0], turnOff: value[1] });
+		if (value[0] > 100 || value[1] < 0 || value[0] < value[1]) {
+			setSettingTemp(DEFAULT_SETTING_TEMP);
+		} else {
+			setSettingTemp({ turnOn: value[0], turnOff: value[1] });
+		}
 	};
 
 	const onSettingHumidityUpdate = (
@@ -329,7 +337,11 @@ function useBLE(): BluetoothLowEnergyApi {
 			.split(" ")
 			.map((str_value: string) => Number(str_value));
 
-		setSettingHumi({ turnOn: value[0], turnOff: value[1] });
+		if (value[0] > 100 || value[1] < 0 || value[0] < value[1]) {
+			setSettingHumi(DEFAULT_SETTING_HUMI);
+		} else {
+			setSettingHumi({ turnOn: value[0], turnOff: value[1] });
+		}
 	};
 
 	const onControlUpdate = (
@@ -344,7 +356,7 @@ function useBLE(): BluetoothLowEnergyApi {
 		}
 
 		const rawData = Number(base64.decode(characteristic.value));
-		let fanSpeed = fanSpeedValueToLevel(rawData);
+		let fanSpeed = fanSpeedValueToLevel(Number(rawData));
 
 		setControl(fanSpeed);
 	};
@@ -363,6 +375,7 @@ function useBLE(): BluetoothLowEnergyApi {
 		const rawData = base64.decode(characteristic.value);
 
 		setAuto(Boolean(Number(rawData)));
+		return 1;
 	};
 
 	// Setter

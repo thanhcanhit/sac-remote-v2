@@ -1,63 +1,27 @@
 import {
-	Avatar,
-	AvatarFallbackText,
 	Box,
 	HStack,
-	Heading,
-	Pressable,
+	Heading, Pressable,
 	ScrollView,
 	Text,
-	View,
+	View
 } from "@gluestack-ui/themed";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import AntDesign from "react-native-vector-icons/AntDesign";
 import { LangContext } from "../../Context/lang";
-import storage, { USER_INFO_KEY } from "../../storage/storage";
 import AboutUs from "./AboutUs";
 import HomeBanner from "./HomeBanner";
-import InfoModal from "./InfoModal";
 import LanguageModal from "./LanguageModal";
 import SettingActionSheet from "./SettingActionSheet";
 
-type UserInfo = {
-	name: string;
-};
 const Home = () => {
 	const { trans } = useContext(LangContext);
 	const [showActionSheet, setShowActionSheet] = useState<boolean>(false);
-	const [userInfo, setUserInfo] = useState<UserInfo>({ name: "" });
-	const [showUserInfoModal, setShowUserInfoModal] = useState<boolean>(false);
 	const [showLanguageModal, setShowLanguageModal] = useState<boolean>(false);
-
-	const saveUserInfoToLocalStorage = (userInfo: UserInfo) => {
-		storage.save({ key: USER_INFO_KEY, data: userInfo });
-	};
-
-	const updateName = (name: string) => {
-		setUserInfo({ ...userInfo, name });
-		setShowUserInfoModal(false);
-		saveUserInfoToLocalStorage({ ...userInfo, name });
-	};
-
-	// Get data in local storage
-	useEffect(() => {
-		const getUserInfoLocalStorage = async () => {
-			try {
-				const userInfoRaw = await storage.load({ key: USER_INFO_KEY });
-
-				setUserInfo(userInfoRaw);
-				setShowUserInfoModal(!userInfoRaw.name);
-			} catch (err) {
-				setShowUserInfoModal(true);
-			}
-		};
-
-		getUserInfoLocalStorage();
-	}, []);
 
 	return (
 		<View>
-			<Heading size="md" bold textAlign="center" color="$coolGray600">
+			<Heading size="md" bold textAlign="center" my={4} color="$coolGray600">
 				{trans({ en: "Home", vi: "Trang chủ" })}
 			</Heading>
 
@@ -73,15 +37,15 @@ const Home = () => {
 						right={0}
 					>
 						<HStack alignItems="center" gap="$2">
-							<Avatar size="sm" borderRadius="$full">
-								<AvatarFallbackText>{userInfo.name}</AvatarFallbackText>
-							</Avatar>
-							<Box>
+							<Box ml={8}>
 								<Text size="xs" color="white">
 									{trans({ en: "Welcome back", vi: "Chào mừng bạn trở lại" })},
 								</Text>
 								<Text size="sm" color="white" bold>
-									{userInfo.name}
+									{trans({
+										en: "Have a nice day",
+										vi: "Chúc bạn một ngày tốt lành",
+									})}
 								</Text>
 							</Box>
 						</HStack>
@@ -97,6 +61,7 @@ const Home = () => {
 				</Box>
 
 				<AboutUs />
+
 			</ScrollView>
 
 			{/* Hidden item */}
@@ -105,13 +70,6 @@ const Home = () => {
 				onClose={() => setShowActionSheet(false)}
 				actions={[
 					{
-						name: { en: "Update username", vi: "Cập nhật người dùng" },
-						onAction: () => {
-							setShowUserInfoModal(true);
-							setShowActionSheet(false);
-						},
-					},
-					{
 						name: { en: "Change language", vi: "Thay đổi ngôn ngữ" },
 						onAction: () => {
 							setShowLanguageModal(true);
@@ -119,15 +77,6 @@ const Home = () => {
 						},
 					},
 				]}
-			/>
-
-			<InfoModal
-				initial={userInfo.name}
-				show={showUserInfoModal}
-				onSubmit={updateName}
-				onClose={() => {
-					setShowUserInfoModal(false);
-				}}
 			/>
 
 			<LanguageModal

@@ -16,32 +16,24 @@ import {
 	View,
 	useToast,
 } from "@gluestack-ui/themed";
-import React, { Fragment, useContext, useEffect, useId, useState } from "react";
+import React, { Fragment, useContext, useEffect, useState } from "react";
 import { Device as BleDevice } from "react-native-ble-plx";
 import { BleContext } from "../../Context/ble";
-import { LangContext, MultilangContent } from "../../Context/lang";
+import { LangContext } from "../../Context/lang";
 import ConnectActionSheet from "./ConnectActionSheet";
 import ConnectModal from "./ConnectModal";
 import DeviceItem from "./DeviceItem";
+import MaterialIcon from "react-native-vector-icons/MaterialIcons";
+import AntDesign from "react-native-vector-icons/AntDesign";
 
-type ToastVariant = "success" | "failure" | "general";
 const Device = () => {
 	const { trans } = useContext(LangContext);
 	const ble = useContext(BleContext);
-	const toast = useToast();
 
 	const [showModal, setShowModal] = useState<boolean>(false);
 	const [showActionSheet, setShowActionSheet] = useState<boolean>(false);
-	const [toastInfo, setToast] = useState<{
-		show: boolean;
-		message: MultilangContent;
-		variant: ToastVariant;
-	}>({
-		show: false,
-		message: { en: "", vi: "" },
-		variant: "general",
-	});
 	const [selectedDevice, setSelectedDevice] = useState<BleDevice | null>(null);
+	const toast = useToast();
 
 	const handleRefreshScan = async () => {
 		const isPermissionsEnabled = await ble.requestPermissions();
@@ -53,59 +45,65 @@ const Device = () => {
 	const handleConnect = async (device: BleDevice) => {
 		try {
 			const isConnected = await ble.connectToDevice(device);
-			if (isConnected)
-				showToast(
-					{
-						en: `Connected to ${device.name}`,
-						vi: `Đã kết nối với ${device.name}`,
+			if (isConnected) {
+				toast.show({
+					placement: "top",
+					render: ({ id }) => {
+						const toastId = "toast-" + id;
+						return (
+							<Toast
+								nativeID={toastId}
+								action="info"
+								variant="solid"
+								rounded="$full"
+							>
+								<HStack space="xs" alignItems="center" gap={4}>
+									<MaterialIcon name="bluetooth-connected" size={16} />
+									<ToastDescription>
+										{trans({
+											en: "Connected to device",
+											vi: "Đã kết nối với thiết bị",
+										})}
+									</ToastDescription>
+								</HStack>
+							</Toast>
+						);
 					},
-					"success"
-				);
-		} catch (e) {
-			showToast(
-				{
-					en: "Unable to connect to the device, ensure it is an SAC device",
-					vi: "Không thể kết nối với thiết bị, hãy chắc chắn rằng nó là thiết bị SAC",
-				},
-				"failure"
-			);
-		}
+				});
+			}
+		} catch (e) {}
 	};
 
 	const handleDisconnect = () => {
 		try {
 			ble.disconnectFromCurrentDevice();
-			showToast(
-				{ en: "Device disconnected", vi: "Đã ngắt kết nối" },
-				"general"
-			);
+			toast.show({
+				placement: "top",
+				render: ({ id }) => {
+					const toastId = "toast-" + id;
+					return (
+						<Toast
+							nativeID={toastId}
+							action="info"
+							variant="solid"
+							rounded="$full"
+						>
+							<HStack space="xs" alignItems="center" gap={8}>
+								<AntDesign name="disconnect" size={16} />
+								<ToastDescription>
+									{trans({
+										en: "Disconnect from device",
+										vi: "Đã ngắt kết nối với thiết bị",
+									})}
+								</ToastDescription>
+							</HStack>
+						</Toast>
+					);
+				},
+			});
 		} catch (err) {
 			console.log("Error when disconnect", err);
 		}
-	};
-
-	const showToast = (message: MultilangContent, variant?: ToastVariant) => {
-		setToast({ message, show: true, variant: variant ? variant : "general" });
-		handleShowToast(useId());
-	};
-
-	const handleShowToast = (id: string) => {
-		toast.show({
-			placement: "top",
-			render: ({ id }) => {
-				const toastId = "toast-" + id;
-				return (
-					<Toast nativeID={toastId} action="attention" variant="solid">
-						<VStack space="xs">
-							<ToastTitle>{toastInfo.variant}</ToastTitle>
-							<ToastDescription>
-								<Text>{trans(toastInfo.message)}</Text>
-							</ToastDescription>
-						</VStack>
-					</Toast>
-				);
-			},
-		});
 	};
 
 	const handleSetSelectedDevice = (device: BleDevice) => {
@@ -140,7 +138,7 @@ const Device = () => {
 
 	return (
 		<View>
-			<Heading size="md" bold textAlign="center" color="$coolGray600">
+			<Heading size="md" bold textAlign="center" my={4} color="$coolGray600">
 				{trans({ en: "Device", vi: "Thiết bị" })}
 			</Heading>
 			<Box px="$4" mt="$2">
@@ -176,11 +174,19 @@ const Device = () => {
 									})}
 								</BadgeText>
 							</Badge>
+							<Text size="xs" ml={4} mb={4} italic>
+								(
+								{trans({
+									en: "Tap to reconnect",
+									vi: "Chạm để kết nối lại",
+								})}
+								)
+							</Text>
 						</HStack>
 						<DeviceItem
 							device={ble.lastDevice}
 							onPress={() => {
-								if (ble.lastDevice) ble.connectToDevice(ble.lastDevice);
+								if (ble.lastDevice) handleConnect(ble.lastDevice);
 							}}
 						/>
 					</Box>
