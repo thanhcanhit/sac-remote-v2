@@ -1,5 +1,5 @@
 {
-	"name": "expo-app",
+	"name": "sac-remote",
 	"version": "2.0.0",
 	"main": "node_modules/expo/AppEntry.js",
 	"scripts": {
@@ -15,6 +15,7 @@
 		"@gluestack-style/react": "latest",
 		"@gluestack-ui/config": "latest",
 		"@gluestack-ui/themed": "latest",
+		"@ptomasroos/react-native-multi-slider": "^2.2.2",
 		"@react-native-async-storage/async-storage": "^1.21.0",
 		"@react-navigation/bottom-tabs": "^6.5.12",
 		"@react-navigation/native": "^6.1.10",

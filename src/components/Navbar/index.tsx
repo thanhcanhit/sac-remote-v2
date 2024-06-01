@@ -4,7 +4,7 @@ import { useNavigation } from "@react-navigation/native";
 import React from "react";
 import AntIcon from "react-native-vector-icons/AntDesign";
 import MaterialCommunityIcon from "react-native-vector-icons/MaterialCommunityIcons";
-import MaterialIcon from "react-native-vector-icons/MaterialIcons";
+
 import { RootParamList } from "../../../App";
 
 type homeScreenProp = BottomTabNavigationProp<RootParamList>;
@@ -36,8 +36,8 @@ const Navbar = () => {
 			<Box position="relative" top={-18}>
 				<TabButton
 					icon={
-						<MaterialIcon
-							name="control-point-duplicate"
+						<MaterialCommunityIcon
+							name="fan"
 							size={18}
 							color={"white"}
 						/>

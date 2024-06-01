@@ -166,7 +166,7 @@ const Welcome = () => {
 	}, []);
 
 	return (
-		<SafeAreaView flex={1} mt={StatusBar.currentHeight} bgColor="$white">
+		<SafeAreaView flex={1} bgColor="$white">
 			{isLoading ? (
 				<Center position="absolute" top={0} left={0} right={0} bottom={0}>
 					<Spinner size="large" />

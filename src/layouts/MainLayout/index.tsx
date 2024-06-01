@@ -32,13 +32,14 @@ const MainLayout = ({ children }: MainLayoutProps) => {
 	}, [children]);
 
 	return (
-		<View flex={1} bgColor="$white" mt={StatusBar.currentHeight}>
+		<SafeAreaView flex={1} bgColor="$white">
+			<StatusBar />
 			<BluetoothStatusBadge isConnected={Boolean(connectedDevice)} />
-			<Box mt="$2" pb={65} width="$full" flex={1}>
+			<Box mt="$2" paddingBottom={75} width="$full" flex={1}>
 				{children}
 			</Box>
-			<Navbar key="old" />
-		</View>
+			<Navbar key="navbar" />
+		</SafeAreaView>
 	);
 };
 

@@ -53,7 +53,7 @@ export default function App() {
 								navigationKey="Welcome"
 								name="Welcome"
 								component={Welcome}
-								options={{ freezeOnBlur: true }}
+								options={{ unmountOnBlur: true}}
 							/>
 							<BottomTab.Screen
 								navigationKey="Home"
