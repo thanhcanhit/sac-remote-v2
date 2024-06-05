@@ -154,6 +154,7 @@ function useBLE(): BluetoothLowEnergyApi {
 			{ allowDuplicates: false },
 			(error, device) => {
 				if (error) {
+					console.log("ERROR SCAN")
 					console.log(error);
 					bleManager.stopDeviceScan();
 				}
@@ -234,7 +235,9 @@ function useBLE(): BluetoothLowEnergyApi {
 		characteristic: Characteristic | null
 	) => {
 		if (error) {
+			console.log("ERROR TEMP UPDATE")
 			console.log(error);
+			setConnectedDevice(null);
 			return -1;
 		} else if (!characteristic?.value) {
 			console.log("No Data was recieved");
@@ -251,7 +254,9 @@ function useBLE(): BluetoothLowEnergyApi {
 		characteristic: Characteristic | null
 	) => {
 		if (error) {
+			console.log("ERROR BATTERY UPDATE")
 			console.log(error);
+			setConnectedDevice(null);
 			return -1;
 		} else if (!characteristic?.value) {
 			console.log("No Data was recieved");
@@ -268,7 +273,9 @@ function useBLE(): BluetoothLowEnergyApi {
 		characteristic: Characteristic | null
 	) => {
 		if (error) {
+			console.log("ERROR HUMIDITY UPDATE")
 			console.log(error);
+			setConnectedDevice(null);
 			return -1;
 		} else if (!characteristic?.value) {
 			console.log("No Data was recieved");
@@ -285,7 +292,9 @@ function useBLE(): BluetoothLowEnergyApi {
 		characteristic: Characteristic | null
 	) => {
 		if (error) {
+			console.log("ERROR POWER UPDATE")
 			console.log(error);
+			setConnectedDevice(null);
 			return -1;
 		} else if (!characteristic?.value) {
 			console.log("Power No Data was recieved");
@@ -302,7 +311,9 @@ function useBLE(): BluetoothLowEnergyApi {
 		characteristic: Characteristic | null
 	) => {
 		if (error) {
+			console.log("ERROR SETTING TEMP UPDATE")
 			console.log(error);
+			setConnectedDevice(null);
 			return -1;
 		} else if (!characteristic?.value) {
 			return -1;
@@ -325,7 +336,9 @@ function useBLE(): BluetoothLowEnergyApi {
 		characteristic: Characteristic | null
 	) => {
 		if (error) {
+			console.log("ERROR SETTING HUMIDITY UPDATE")
 			console.log(error);
+			setConnectedDevice(null);
 			return -1;
 		} else if (!characteristic?.value) {
 			console.log("No Data was recieved");
@@ -349,7 +362,9 @@ function useBLE(): BluetoothLowEnergyApi {
 		characteristic: Characteristic | null
 	) => {
 		if (error) {
+			console.log("ERROR CONTROL UPDATE")
 			console.log(error);
+			setConnectedDevice(null);
 			return -1;
 		} else if (!characteristic?.value) {
 			return -1;
@@ -366,7 +381,9 @@ function useBLE(): BluetoothLowEnergyApi {
 		characteristic: Characteristic | null
 	) => {
 		if (error) {
+			console.log("ERROR AUTO CHANGE UPDATE")
 			console.log(error);
+			setConnectedDevice(null);
 			return -1;
 		} else if (!characteristic?.value) {
 			return -1;

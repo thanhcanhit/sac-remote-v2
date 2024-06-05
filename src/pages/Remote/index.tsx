@@ -107,7 +107,7 @@ const Remote = () => {
 		[currentView]
 	);
 
-	const currentValue = useMemo(() => {
+	const currentValue = (() => {
 		switch (currentInfoItem?.id) {
 			case "battery":
 				return ble.battery;
@@ -118,39 +118,38 @@ const Remote = () => {
 			default:
 				return 15;
 		}
-	}, [currentInfoItem]);
+	})();
 
 	if (!currentInfoItem) return <Fragment />;
 
-	// useEffect(() => {
-	// 	if (!ble.connectedDevice) {
-	// 		toast.show({
-	// 			placement: "top",
-	// 			render: ({ id }) => {
-	// 				const toastId = "remote-toast-" + id;
-	// 				return (
-	// 					<Toast
-	// 						nativeID={toastId}
-	// 						action="warning"
-	// 						variant="solid"
-	// 						rounded="$full"
-							
-	// 					>
-	// 						<HStack space="xs" alignItems="center" gap={4}>
-	// 							<MaterialIcon name="bluetooth-connected" size={16} />
-	// 							<ToastDescription>
-	// 								{trans({
-	// 									en: "No device connected",
-	// 									vi: "Chưa kết nối thiết bị",
-	// 								})}
-	// 							</ToastDescription>
-	// 						</HStack>
-	// 					</Toast>
-	// 				);
-	// 			},
-	// 		});
-	// 	}
-	// }, [ble.connectedDevice]);
+	useEffect(() => {
+		if (!ble.connectedDevice) {
+			toast.show({
+				placement: "top",
+				render: ({ id }) => {
+					const toastId = "remote-toast-" + id;
+					return (
+						<Toast
+							nativeID={toastId}
+							action="error"
+							variant="solid"
+							rounded="$full"
+						>
+							<HStack space="xs" alignItems="center" gap={4}>
+								<MaterialIcon name="bluetooth-connected" size={16} />
+								<ToastDescription>
+									{trans({
+										en: "No device connected",
+										vi: "Chưa kết nối thiết bị",
+									})}
+								</ToastDescription>
+							</HStack>
+						</Toast>
+					);
+				},
+			});
+		}
+	}, [ble.connectedDevice]);
 
 	return (
 		<>
